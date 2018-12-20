@@ -3,7 +3,7 @@ import * as types from "../types"
 import {IValidation, ValidationInput} from "../types"
 import defaultConfig from "../defaultConfig"
 import {standarizeInput} from "../util/standarizeInput"
-// import * as mod11 from 'checkdigit'
+import * as checkdigit from 'checkdigit'
 
 export class NorwegianBbanValidation implements IValidation {
     _config: types.BankAccountValidationConfig
@@ -28,9 +28,8 @@ export class NorwegianBbanValidation implements IValidation {
         input = standarizeInput(input)
 
         return {
-            valid: this._syntaxTester.test(input.accountNumber)
-                // &&
-                // mod11.isValid(input.accountNumber)
+            valid: this._syntaxTester.test(input.accountNumber) &&
+                checkdigit.mod11.isValid(input.accountNumber)
         }
     }
 }
