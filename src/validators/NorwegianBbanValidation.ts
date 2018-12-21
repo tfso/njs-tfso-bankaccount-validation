@@ -11,7 +11,7 @@ export class NorwegianBbanValidation implements IValidation {
 
     constructor(config: Partial<types.BankAccountValidationConfig>) {
         this._config = defaultsDeep({}, config, defaultConfig)
-        this._syntaxTester = /^\d{11}.*$/
+        this._syntaxTester = /^\d{11}$/
     }
 
     canValidate(input: string | ValidationInput): Boolean {

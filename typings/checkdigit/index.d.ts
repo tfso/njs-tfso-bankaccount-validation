@@ -2,15 +2,15 @@
 
 declare module 'checkdigit' {
     export const mod10: {
-        apply: any
-        create: any
-        isValid: (a:string) => boolean
+        apply: (input:string) => string
+        create: (input:string) => string
+        isValid: (input:string) => boolean
     }
 
     export const mod11: {
-        apply: any
-        create: any
-        isValid: (a:string) => boolean
+        apply: (input:string) => string
+        create: (input:string) => string
+        isValid: (input:string) => boolean
     }
 }
 
