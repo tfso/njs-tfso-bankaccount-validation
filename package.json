@@ -10,6 +10,7 @@
     "test": "mocha --recursive ./test/**/test*"
   },
   "dependencies": {
+    "cdigit": "2.3.4",
     "lodash.defaultsdeep": "4.6.0"
   },
   "devDependencies": {
