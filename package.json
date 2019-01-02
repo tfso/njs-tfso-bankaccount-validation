@@ -10,7 +10,6 @@
     "test": "mocha --recursive ./test/**/test*"
   },
   "dependencies": {
-    "cdigit": "2.3.4",
     "lodash.defaultsdeep": "4.6.0"
   },
   "devDependencies": {
@@ -19,7 +18,6 @@
     "@types/mocha": "5.2.5",
     "@types/sinon-chai": "3.2.2",
     "chai": "4.2.0",
-    "checkdigit": "1.1.1",
     "ibantools": "2.0.0",
     "mocha": "5.2.0",
     "publish-to-git": "github:tfso/publish-to-git",

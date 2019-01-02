@@ -4,7 +4,7 @@ import {IValidation, ValidationInput} from "../types"
 import defaultConfig from "../defaultConfig"
 import {swedishBanks} from "../util/swedishBanks"
 import {standarizeInput} from "../util/standarizeInput"
-import * as checkdigit from 'checkdigit'
+import {calculate, modulusValidation} from '../util/modulusCalculation'
 
 interface Account{
     clearing: number
@@ -47,11 +47,11 @@ export class SwedishBbanValidation implements IValidation {
         let account = this.parseBban(bban)
 
         if (
-            account.type === '1.1' && account.length === 7  && checkdigit.mod11.isValid(account.bban.substr(0,10)) ||
-            account.type === '1.2' && account.length === 7  && checkdigit.mod11.isValid(account.bban) ||
-            account.type === '2.1' && account.length === 10 && checkdigit.mod10.isValid(account.accountNumber) ||
-            account.type === '2.2' && account.length === 9  && checkdigit.mod11.isValid(account.accountNumber) ||
-            account.type === '2.3' && account.length === 10 && checkdigit.mod10.isValid(account.accountNumber)
+            account.type === '1.1' && account.length === 7  && sweMod11(account.bban.substr(1)) ||
+            account.type === '1.2' && account.length === 7  && sweMod11(account.bban) ||
+            account.type === '2.1' && account.length === 10 && sweMod10(account.accountNumber) ||
+            account.type === '2.2' && account.length === 9  && sweMod11(account.accountNumber) ||
+            account.type === '2.3' && account.length === 10 && sweMod10(account.accountNumber)
         ){
             return {valid:true}
         }
@@ -83,4 +83,15 @@ export class SwedishBbanValidation implements IValidation {
 
         return bank.type + '.' + bank.comment
     }
+}
+
+
+function sweMod10(number:string){
+    let sum = calculate(number, [2,1], (n:any) => n>9 ? n-9:n)
+    return modulusValidation(sum, 10)
+}
+
+function sweMod11(number:string){
+    let sum = calculate(number, [10,9,8,7,6,5,4,3,2,1])
+    return modulusValidation(sum, 11)
 }
