@@ -11,17 +11,14 @@ export class IbanValidation implements IValidation {
 
     constructor(config: Partial<types.BankAccountValidationConfig>) {
         this._config = defaultsDeep({}, config, defaultConfig)
-        this._syntaxTester = /^[A-Z]{2}.*$/
+        this._syntaxTester = /^[A-Z]{2}\d{2}.*$/
     }
 
     canValidate(input: string | ValidationInput): Boolean {
         input = standarizeInput(input)
 
-        if (input.type && input.type!=='iban'){
-            return false
-        }
-
-        return input && this._syntaxTester.test(input.accountNumber)
+        return (!input.type || input.type === 'iban')
+            && this._syntaxTester.test(input.accountNumber)
     }
 
     validate(input: string | ValidationInput) {

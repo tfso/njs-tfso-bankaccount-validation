@@ -18,11 +18,8 @@ export class NorwegianBbanValidation implements IValidation {
     canValidate(input: string | ValidationInput): Boolean {
         input = standarizeInput(input)
 
-        if (input.type && input.type!=='bban'){
-            return false
-        }
-
-        return input.countryCode === 'NO'
+        return (!input.type || input.type === 'bban')
+            && input.countryCode === 'NO'
     }
 
     validate(input: string | ValidationInput) {

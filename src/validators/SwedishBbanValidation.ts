@@ -27,11 +27,8 @@ export class SwedishBbanValidation implements IValidation {
     canValidate(input: string | ValidationInput): Boolean {
         input = standarizeInput(input)
 
-        if (input.type && input.type!=='bban'){
-            return false
-        }
-
-        return input.countryCode === 'SE'
+        return (!input.type || input.type === 'bban')
+            && input.countryCode === 'SE'
     }
 
     validate(input: string | ValidationInput) {
