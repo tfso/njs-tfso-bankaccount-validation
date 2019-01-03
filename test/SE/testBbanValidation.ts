@@ -19,6 +19,19 @@ describe('SwedishBbanValidation', ()=> {
     })
 
     describe('when validating', ()=> {
+
+
+        it('should invalidate an unknown clearing number in a Swedish BBAN account (type 0.0)', ()=>{
+            chai.expect(validation.validate({accountNumber: '90307777777'})).to.deep.equal({
+                'valid': false
+            })
+        })
+
+        it('should invalidate a Swedish BBAN account with invalid syntax', ()=>{
+            chai.expect(validation.validate({accountNumber: '544088888888'})).to.deep.equal({
+                'valid': false
+            })
+        })
     })
 
     describe('when determining suitability', ()=> {

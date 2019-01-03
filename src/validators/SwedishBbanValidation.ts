@@ -78,7 +78,10 @@ export class SwedishBbanValidation implements IValidation {
             return bank.clearingFrom <= clearingNumber && clearingNumber <= bank.clearingTo
         })
 
-        if (banks.length !== 1 ) throw new Error('Clearing number is not supported')
+        if (banks.length !== 1 ) {
+            return '0.0'
+        }
+
         let bank = banks[0]
 
         return bank.type + '.' + bank.comment

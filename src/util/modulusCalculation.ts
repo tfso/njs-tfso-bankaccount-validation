@@ -7,7 +7,6 @@ function normaizeWeights(weights: number[], length: number) {
         _weights.shift()
     }
 
-    if (_weights.length !== length) throw new Error('sdfsdf')
     return _weights
 }
 
