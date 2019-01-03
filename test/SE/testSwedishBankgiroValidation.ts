@@ -1,5 +1,4 @@
 import * as chai from 'chai'
-// import * as sinonChai from 'sinon-chai'
 import {SwedishBankgiroValidation} from '../../src/validators/SwedishBankgiroValidation'
 
 describe('SwedishBankgiroValidation', ()=> {

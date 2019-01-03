@@ -1,5 +1,4 @@
 import * as chai from 'chai'
-// import * as sinonChai from 'sinon-chai'
 import {NorwegianBbanValidation} from '../../src/validators/NorwegianBbanValidation'
 
 // 11110077949

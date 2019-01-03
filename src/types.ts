@@ -1,5 +1,4 @@
 export interface BankAccountValidationConfig{
-    a: Boolean
 }
 
 export interface ValidationInput{

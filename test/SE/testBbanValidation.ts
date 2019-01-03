@@ -1,16 +1,5 @@
 import * as chai from 'chai'
-// import * as sinonChai from 'sinon-chai'
 import {SwedishBbanValidation} from '../../src/validators/SwedishBbanValidation'
-
-// 11110077949
-// 22220012607
-// 33330027946
-// 44440025746
-// 55550090405
-// 66660052292
-// 77770076598
-// 88880051606
-// 99990043120
 
 describe('SwedishBbanValidation', ()=> {
     let validation:SwedishBbanValidation
