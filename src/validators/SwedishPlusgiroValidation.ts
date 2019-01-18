@@ -10,7 +10,7 @@ export class SwedishPlusgiroValidation implements IValidation {
 
     constructor(config: Partial<types.BankAccountValidationConfig>) {
         this._config = defaultsDeep({}, config, defaultConfig)
-        this._syntaxTester = /^(\d{5}|\d{7})-\d$/
+        this._syntaxTester = /^(\d{1,7})-\d$/
     }
 
     canValidate(input: string | ValidationInput): Boolean {
