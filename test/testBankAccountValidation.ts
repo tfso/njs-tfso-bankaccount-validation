@@ -33,6 +33,10 @@ describe('BankAccountValidation', ()=> {
             bankAccountValidation.add(new AcceptValidation())
             chai.expect(bankAccountValidation.validate('')).to.equal(true)
         })
+        it('should return null when no usable validators is found', ()=>{
+            let bankAccountValidation = new BankAccountValidation({acceptanceType: AcceptanceType.all})
+            chai.expect(bankAccountValidation.validate('')).to.equal(null)
+        })
     })
 
     describe('when using acceptance type someAccept', ()=> {
@@ -47,6 +51,10 @@ describe('BankAccountValidation', ()=> {
             bankAccountValidation.add(new AcceptValidation())
             bankAccountValidation.add(new RejectValidation())
             chai.expect(bankAccountValidation.validate('')).to.equal(true)
+        })
+        it('should return null when no usable validators is found', ()=>{
+            let bankAccountValidation = new BankAccountValidation({acceptanceType: AcceptanceType.some})
+            chai.expect(bankAccountValidation.validate('')).to.equal(null)
         })
     })
 })

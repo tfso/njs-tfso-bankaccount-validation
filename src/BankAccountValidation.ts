@@ -25,13 +25,18 @@ export class BankAccountValidation{
                 return validationRule.validate(input)
             })
 
-        if (this._config.acceptanceType === AcceptanceType.some){
-            return validationResults.some(result => result.valid === true)
-        }
-        if (this._config.acceptanceType === AcceptanceType.all){
-            return validationResults.every(result => result.valid === true)
+        let validResults = validationResults.filter(result => result.valid === true)
+
+        if (validationResults.length === 0){
+            return null
         }
 
-        throw Error('Error when validating')
+        if (this._config.acceptanceType === AcceptanceType.some){
+            return validResults.length > 0
+        }
+        if (this._config.acceptanceType === AcceptanceType.all){
+            return validResults.length === validationResults.length
+        }
+        return null
     }
 }
