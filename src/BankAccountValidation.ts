@@ -1,7 +1,7 @@
 import * as types from './types'
 import defaultsDeep = require('lodash.defaultsdeep')
 import defaultConfig from './defaultConfig'
-import {ValidationInput} from "./types"
+import {AcceptanceType, ValidationInput} from "./types"
 
 export class BankAccountValidation{
     _config: types.BankAccountValidationConfig
@@ -17,12 +17,21 @@ export class BankAccountValidation{
     }
 
     validate(input:string|ValidationInput){
-        return this._validationRules
+        let validationResults = this._validationRules
             .filter(validationRule =>{
                 return validationRule.canValidate(input)
             })
             .map(validationRule =>{
                 return validationRule.validate(input)
             })
+
+        if (this._config.acceptanceType === AcceptanceType.some){
+            return validationResults.some(result => result.valid === true)
+        }
+        if (this._config.acceptanceType === AcceptanceType.all){
+            return validationResults.every(result => result.valid === true)
+        }
+
+        throw Error('Error when validating')
     }
 }

@@ -1,4 +1,4 @@
-import { BankAccountValidation } from '../src'
+import {BankAccountValidation} from '../src'
 import * as types from "./types"
 import {SwedishBankgiroValidation} from "./validators/SwedishBankgiroValidation"
 import {SwedishPlusgiroValidation} from "./validators/SwedishPlusgiroValidation"

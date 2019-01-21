@@ -1,4 +1,5 @@
 export interface BankAccountValidationConfig{
+    acceptanceType: AcceptanceType
 }
 
 export interface ValidationInput{
@@ -14,4 +15,9 @@ export interface ValidationResult{
 export interface IValidation{
     validate(input:any): ValidationResult
     canValidate(input:any): Boolean
+}
+
+export enum AcceptanceType {
+    some = 'some',
+    all = 'all',
 }
