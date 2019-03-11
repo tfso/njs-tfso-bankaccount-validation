@@ -16,14 +16,14 @@ export class NorwegianBbanValidation implements IValidation {
     }
 
     canValidate(input: string | ValidationInput): Boolean {
-        input = standarizeInput(input)
+        input = standarizeInput(input, 'none')
 
-        return (!input.type || input.type === 'bban')
+        return (input.type === 'bban')
             && input.countryCode === 'NO'
     }
 
     validate(input: string | ValidationInput) {
-        input = standarizeInput(input)
+        input = standarizeInput(input, 'none')
 
         return {
             valid: this._syntaxTester.test(input.accountNumber) &&

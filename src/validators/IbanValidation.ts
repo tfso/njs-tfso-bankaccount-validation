@@ -15,14 +15,17 @@ export class IbanValidation implements IValidation {
     }
 
     canValidate(input: string | ValidationInput): Boolean {
-        input = standarizeInput(input)
+        input = standarizeInput(input, 'none')
 
-        return (!input.type || input.type === 'iban')
-            && this._syntaxTester.test(input.accountNumber)
+        if (input.type === 'iban'){
+            return true
+        }
+
+        return input.type === 'none' && this._syntaxTester.test(input.accountNumber)
     }
 
     validate(input: string | ValidationInput) {
-        input = standarizeInput(input)
+        input = standarizeInput(input, 'none')
 
         return {
             valid: ibantools.isValidIBAN(input.accountNumber)

@@ -14,14 +14,14 @@ export class SwedishPlusgiroValidation implements IValidation {
     }
 
     canValidate(input: string | ValidationInput): Boolean {
-        input = standarizeInput(input)
+        input = standarizeInput(input, 'none')
 
-        return (!input.type || input.type === 'plusgiro')
+        return (input.type === 'plusgiro')
             && input.countryCode === 'SE'
     }
 
     validate(input: string | ValidationInput) {
-        input = standarizeInput(input)
+        input = standarizeInput(input, 'none')
 
         return {
             valid: this._syntaxTester.test(input.accountNumber)

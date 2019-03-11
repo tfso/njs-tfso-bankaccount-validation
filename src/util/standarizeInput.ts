@@ -12,10 +12,11 @@ import {ValidationInput} from "../types"
 //     return result
 // }
 
-export function standarizeInput(input: string | ValidationInput):ValidationInput {
+export function standarizeInput(input: string | ValidationInput, type:string):ValidationInput {
     if (typeof input === "string") {
         input = {
-            accountNumber: input
+            accountNumber: input,
+            type
         }
     }
     return input

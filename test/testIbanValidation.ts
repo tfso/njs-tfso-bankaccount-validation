@@ -32,8 +32,8 @@ describe('IbanValidation', ()=> {
             chai.expect(validation.canValidate({accountNumber: 'DK5750510001322618'})).to.equal(true)
         })
 
-        it('should not accept a syntactically invalid IBAN', ()=>{
-            chai.expect(validation.canValidate({accountNumber: '9DK5750510001322618'})).to.equal(false)
+        it('should accept a syntactically invalid IBAN only if type is not set', ()=>{
+            chai.expect(validation.canValidate({accountNumber: '9DK5750510001322618'})).to.equal(true)
         })
 
         it('should not accept a type different from iban', ()=>{

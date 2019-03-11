@@ -25,14 +25,14 @@ export class SwedishBbanValidation implements IValidation {
     }
 
     canValidate(input: string | ValidationInput): Boolean {
-        input = standarizeInput(input)
+        input = standarizeInput(input, 'none')
 
-        return (!input.type || input.type === 'bban')
+        return (input.type === 'bban')
             && input.countryCode === 'SE'
     }
 
     validate(input: string | ValidationInput) {
-        input = standarizeInput(input)
+        input = standarizeInput(input, 'none')
         let bban = input.accountNumber
 
         let valid = this._syntaxTester.test(bban)
