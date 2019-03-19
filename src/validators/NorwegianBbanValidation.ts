@@ -1,12 +1,12 @@
 import defaultsDeep = require('lodash.defaultsdeep')
 import * as types from "../types"
-import {IValidation, ValidationInput} from "../types"
+import {IStrictValidation, ValidationInput} from "../types"
 import defaultConfig from "../defaultConfig"
 import {standarizeInput} from "../util/standarizeInput"
 // import * as checkdigit from 'checkdigit'
 import {calculate, modulusValidation} from '../util/modulusCalculation'
 
-export class NorwegianBbanValidation implements IValidation {
+export class NorwegianBbanValidation implements IStrictValidation {
     _config: types.BankAccountValidationConfig
     private _syntaxTester: RegExp
 
@@ -15,19 +15,23 @@ export class NorwegianBbanValidation implements IValidation {
         this._syntaxTester = /^\d{11}$/
     }
 
-    canValidate(input: string | ValidationInput): Boolean {
+    canValidate(input: ValidationInput): Boolean {
         input = standarizeInput(input, 'none')
 
         return (input.type === 'bban')
             && input.countryCode === 'NO'
     }
 
-    validate(input: string | ValidationInput) {
+    validate(input: ValidationInput) {
         input = standarizeInput(input, 'none')
 
+        let validSyntax = this._syntaxTester.test(input.accountNumber)
+        let validModCheck = norMod11(input.accountNumber)
         return {
-            valid: this._syntaxTester.test(input.accountNumber) &&
-                norMod11(input.accountNumber)
+            valid: validSyntax &&
+                validModCheck,
+            reason: !validSyntax ? 'Number does not contain 11 digits' :
+                !validModCheck ? 'Account number does not pass the sum check': null
         }
     }
 }

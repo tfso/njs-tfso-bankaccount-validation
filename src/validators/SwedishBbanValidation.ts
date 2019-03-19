@@ -1,6 +1,6 @@
 import defaultsDeep = require('lodash.defaultsdeep')
 import * as types from "../types"
-import {IValidation, ValidationInput} from "../types"
+import {IStrictValidation, ValidationInput, ValidationResult} from "../types"
 import defaultConfig from "../defaultConfig"
 import {swedishBanks} from "../util/swedishBanks"
 import {standarizeInput} from "../util/standarizeInput"
@@ -14,7 +14,7 @@ interface Account{
     length: number
 }
 
-export class SwedishBbanValidation implements IValidation {
+export class SwedishBbanValidation implements IStrictValidation {
     _config: types.BankAccountValidationConfig
     private _syntaxTester: RegExp
 
@@ -24,21 +24,26 @@ export class SwedishBbanValidation implements IValidation {
         this._syntaxTester = /^\d{4}(:?\d{7}|\d{9}|\d{10})$/
     }
 
-    canValidate(input: string | ValidationInput): Boolean {
+    canValidate(input: ValidationInput): Boolean {
         input = standarizeInput(input, 'none')
 
         return (input.type === 'bban')
             && input.countryCode === 'SE'
     }
 
-    validate(input: string | ValidationInput) {
+    validate(input: ValidationInput): ValidationResult {
         input = standarizeInput(input, 'none')
+
+
         let bban = input.accountNumber
 
-        let valid = this._syntaxTester.test(bban)
+        let validSyntax = this._syntaxTester.test(bban)
 
-        if (!valid){
-            return {valid:false}
+        if (!validSyntax){
+            return {
+                valid: false,
+                reason: 'Invalid swedish syntax. Number must be 11, 13 or 14 digits long'
+            }
         }
 
         let account = this.parseBban(bban)
@@ -50,10 +55,16 @@ export class SwedishBbanValidation implements IValidation {
             account.type === '2.2' && account.length === 9  && sweMod11(account.accountNumber) ||
             account.type === '2.3' && account.length === 10 && sweMod10(account.accountNumber)
         ){
-            return {valid:true}
+            return {
+                valid: true,
+                reason: null
+            }
         }
 
-        return {valid:false}
+        return {
+            valid: false,
+            reason: 'Invalid Swedish bban'
+        }
     }
 
     private parseBban(bban:string):Account {

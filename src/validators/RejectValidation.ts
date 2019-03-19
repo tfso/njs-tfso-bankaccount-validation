@@ -1,4 +1,4 @@
-import {IValidation} from "../types"
+import {IValidation, ValidationResult} from "../types"
 
 export class RejectValidation implements IValidation {
 
@@ -9,9 +9,10 @@ export class RejectValidation implements IValidation {
         return true
     }
 
-    validate() {
+    validate() : ValidationResult{
         return {
-            valid: false
+            valid: false,
+            reason: 'Invalid'
         }
     }
 }
