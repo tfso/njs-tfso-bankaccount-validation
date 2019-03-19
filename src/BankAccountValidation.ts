@@ -50,8 +50,6 @@ export class BankAccountValidation{
                 return validationRule.validate(input)
             })
 
-        let validResults = validationResults.filter(result => result.valid === true)
-
         if (validationResults.length === 0){
             return {
                 valid: undefined,
@@ -59,9 +57,11 @@ export class BankAccountValidation{
             }
         }
 
+        let validResults = validationResults.filter(result => result.valid)
+        let invalidResults = validationResults.filter(result => !result.valid)
+
         // @ts-ignore
-        let reasons : string[] = validResults
-            .filter(result => !result.valid)
+        let reasons : string[] = invalidResults
             .map(result => result.reason)
 
         if (this._config.acceptanceType === AcceptanceType.some){

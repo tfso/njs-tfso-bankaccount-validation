@@ -21,7 +21,7 @@ describe('BankAccountValidation', ()=> {
             bankAccountValidation.addStrict(new IbanValidation({}))
             chai.expect(bankAccountValidation.validate('DK5750510001322618')).to.deep.equal({
                 valid: false,
-                reasons: []
+                reasons: ["Invalid iban"]
             })
         })
     })
@@ -33,7 +33,7 @@ describe('BankAccountValidation', ()=> {
             bankAccountValidation.add(new RejectValidation())
             chai.expect(bankAccountValidation.validate({accountNumber:''})).to.deep.equal({
                 valid: false,
-                reasons: []
+                reasons: ["Invalid"]
             })
         })
         it('should validate when all validates', ()=>{
@@ -60,7 +60,10 @@ describe('BankAccountValidation', ()=> {
             bankAccountValidation.add(new RejectValidation())
             chai.expect(bankAccountValidation.validate({accountNumber:''})).to.deep.equal({
                 valid: false,
-                reasons: []
+                reasons: [
+                    "Invalid",
+                    "Invalid"
+                ]
             })
         })
         it('should validate when some validates', ()=>{
@@ -69,7 +72,9 @@ describe('BankAccountValidation', ()=> {
             bankAccountValidation.add(new RejectValidation())
             chai.expect(bankAccountValidation.validate({accountNumber:''})).to.deep.equal({
                 valid: true,
-                reasons: []
+                reasons: [
+                    "Invalid"
+                ]
             })
         })
         it('should return null when no usable validators is found', ()=>{
