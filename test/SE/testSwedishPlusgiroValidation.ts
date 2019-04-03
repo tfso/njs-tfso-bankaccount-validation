@@ -8,73 +8,73 @@ describe('SwedishPlusgiroValidation', ()=> {
     })
 
     describe('when validating', ()=> {
-        // it('should validate a valid plusgiro account number as string input', ()=>{
-        //     chai.expect(validation.validate('12345-1')).to.deep.equal({
-        //         valid: true,
-        //         reason: null
-        //     })
-        // })
+        it('should invalidate a plusgiro account number when not passing mod 10 sum check', ()=>{
+            chai.expect(validation.validate({accountNumber: '4-3', countryCode: 'SE'})).to.deep.equal({
+                valid: false,
+                reason: "Account number does not pass the sum check"
+            })
+        })
 
         it('should validate a plusgiro account number with format X-Y', ()=>{
-            chai.expect(validation.validate({accountNumber:'1-1', countryCode:'SE'})).to.deep.equal({
+            chai.expect(validation.validate({accountNumber:'4-2', countryCode:'SE'})).to.deep.equal({
                 valid: true,
                 reason: null
             })
         })
 
         it('should validate a plusgiro account number with format XX-Y', ()=>{
-            chai.expect(validation.validate({accountNumber:'22-1', countryCode:'SE'})).to.deep.equal({
+            chai.expect(validation.validate({accountNumber:'22-4', countryCode:'SE'})).to.deep.equal({
                 valid: true,
                 reason: null
             })
         })
 
         it('should validate a plusgiro account number with format XXX-Y', ()=>{
-            chai.expect(validation.validate({accountNumber:'333-1', countryCode:'SE'})).to.deep.equal({
+            chai.expect(validation.validate({accountNumber:'333-5', countryCode:'SE'})).to.deep.equal({
                 valid: true,
                 reason: null
             })
         })
 
         it('should validate a plusgiro account number with format XXXX-Y', ()=>{
-            chai.expect(validation.validate({accountNumber:'4444-1', countryCode:'SE'})).to.deep.equal({
+            chai.expect(validation.validate({accountNumber:'4444-6', countryCode:'SE'})).to.deep.equal({
                 valid: true,
                 reason: null
             })
         })
 
         it('should validate a plusgiro account number with format XXXXX-Y', ()=>{
-            chai.expect(validation.validate({accountNumber:'55555-1', countryCode:'SE'})).to.deep.equal({
+            chai.expect(validation.validate({accountNumber:'55555-7', countryCode:'SE'})).to.deep.equal({
                 valid: true,
                 reason: null
             })
         })
 
         it('should validate a plusgiro account number with format XXXXXX-Y', ()=>{
-            chai.expect(validation.validate({accountNumber:'666666-1', countryCode:'SE'})).to.deep.equal({
+            chai.expect(validation.validate({accountNumber:'666666-3', countryCode:'SE'})).to.deep.equal({
                 valid: true,
                 reason: null
             })
         })
 
         it('should validate a plusgiro account number with format XXXXXXX-Y', ()=>{
-            chai.expect(validation.validate({accountNumber:'7777777-1', countryCode:'SE'})).to.deep.equal({
+            chai.expect(validation.validate({accountNumber:'7777777-9', countryCode:'SE'})).to.deep.equal({
                 valid: true,
                 reason: null
             })
         })
 
         it('should validate a valid plusgiro account number as object input', ()=>{
-            chai.expect(validation.validate({accountNumber: '1234567-1', countryCode:'SE'})).to.deep.equal({
+            chai.expect(validation.validate({accountNumber: '1234567-4', countryCode:'SE'})).to.deep.equal({
                 valid: true,
                 reason: null
             })
         })
 
         it('should invalidate an invalid plusgiro account number', ()=>{
-            chai.expect(validation.validate({accountNumber:'12345678-1', countryCode:'SE'})).to.deep.equal({
+            chai.expect(validation.validate({accountNumber:'12345678-2', countryCode:'SE'})).to.deep.equal({
                 valid: false,
-                reason: "Number does not match the Swedish plus giro syntax"
+                reason: "Account number does not match the Swedish plus giro format. Valid format is \"XXXXX(X(X)))-X\""
             })
         })
 

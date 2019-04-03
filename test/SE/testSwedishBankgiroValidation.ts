@@ -8,24 +8,30 @@ describe('SwedishBankgiroValidation', ()=> {
     })
 
     describe('when validating', ()=> {
-        // it('should validate a valid bankgiro account number as string input', ()=>{
-        //     chai.expect(validation.validate('1234-1234')).to.deep.equal({
-        //         valid: true,
-        //         reason: null
-        //     })
-        // })
-
-        it('should validate a valid bankgiro account number as object input', ()=>{
-            chai.expect(validation.validate({accountNumber: '123-1234', countryCode: 'SE'})).to.deep.equal({
+        it('should validate a valid bankgiro account number on format XXX-XXXX', ()=>{
+            chai.expect(validation.validate({accountNumber: '991-2346', countryCode: 'SE'})).to.deep.equal({
                 valid: true,
                 reason: null
+            })
+        })
+        it('should validate a valid bankgiro account number on format XXXX-XXXX', ()=>{
+            chai.expect(validation.validate({accountNumber: '5555-5551', countryCode: 'SE'})).to.deep.equal({
+                valid: true,
+                reason: null
+            })
+        })
+
+        it('should invalidate a bankgiro account number when not passing mod 10 sum check', ()=>{
+            chai.expect(validation.validate({accountNumber: '123-1234', countryCode: 'SE'})).to.deep.equal({
+                valid: false,
+                reason: "Account number does not pass the sum check"
             })
         })
 
         it('should invalidate an invalid bankgiro account number', ()=>{
             chai.expect(validation.validate({accountNumber: '12345-1234', countryCode: 'SE'})).to.deep.equal({
                 valid: false,
-                reason: 'Number does not match the Swedish bank giro syntax'
+                reason: 'Account number does not match the Swedish bank giro format. Valid format is "XX(X)-XXXX"'
             })
         })
 

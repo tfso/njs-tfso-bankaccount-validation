@@ -3,6 +3,7 @@ import * as types from "../types"
 import {IStrictValidation, ValidationInput} from "../types"
 import defaultConfig from "../defaultConfig"
 import {standarizeInput} from "../util/standarizeInput"
+import {calculate, modulusValidation} from "../util/modulusCalculation"
 
 export class SwedishBankgiroValidation implements IStrictValidation {
     _config: types.BankAccountValidationConfig
@@ -27,10 +28,18 @@ export class SwedishBankgiroValidation implements IStrictValidation {
             }
         }
 
-        let isValid = this._syntaxTester.test(input.accountNumber)
+        let validSyntax = this._syntaxTester.test(input.accountNumber)
+        let validModCheck = sweMod10(input.accountNumber.replace('-', ''))
         return {
-            valid: isValid,
-            reason: isValid ? null : 'Number does not match the Swedish bank giro syntax'
+            valid: validSyntax &&
+                validModCheck,
+            reason: !validSyntax ? 'Account number does not match the Swedish bank giro format. Valid format is "XX(X)-XXXX"' :
+                !validModCheck ? 'Account number does not pass the sum check': null
         }
     }
+}
+
+function sweMod10(number:string){
+    let sum = calculate(number, [2,1], (n:any) => n>9 ? n-9:n)
+    return modulusValidation(sum, 10)
 }

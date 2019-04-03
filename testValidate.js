@@ -3,25 +3,26 @@ let bankAccountValidation  = createValidationWithAllAvailableValidators({})
 
 
 function calculate(countryCode, accountNumber, type) {
-    console.log([countryCode, accountNumber, type+':', (bankAccountValidation.validate({
+    let result = bankAccountValidation.validate({
         countryCode,
         accountNumber,
         type
-    }) ? 'OK' : 'not OK')].join('\t'))
+    })
+    console.log([countryCode, accountNumber, (type+':    ').substring(0,9), (result.valid ? 'is OK ' : 'not OK'), result.reasons.join('. ')].join('\t'))
 }
-function calculateNext(countryCode, accountNumber, type) {
-    let b
-    let number = accountNumber.substr(0,accountNumber.length-1)
-    for (let i = 0; i<10; i++){
-        accountNumber = number+i
-        b = bankAccountValidation.validate({
+function calculateNext(countryCode, accountNumber, type,digits=3) {
+    let result
+    let number = accountNumber.substr(0,accountNumber.length-digits)
+    for (let i = 0; i<1000; i++){
+        accountNumber = number+('00' + i).substr(-digits)
+        result = bankAccountValidation.validate({
             countryCode,
             accountNumber,
             type
         })
-        if (b) break;
+        if (result.valid) break;
     }
-    console.log([countryCode, accountNumber, type+':', (b ? 'OK' : 'not OK')].join('\t'))
+    console.log([countryCode, accountNumber, (type+':    ').substring(0,9), (result.valid ? 'is OK ' : 'not OK'), result.reasons.join('. ')].join('\t'))
 }
 
 calculate('SE', '1111-1116', 'bankgiro')
