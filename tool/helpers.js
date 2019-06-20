@@ -12,8 +12,9 @@ function calculate(countryCode, accountNumber, type, resultFunc=console.log) {
 function calculateNext(countryCode, accountNumber, type, digits=3, resultFunc=console.log) {
     let result
     let number = accountNumber.substr(0,accountNumber.length-digits)
-    for (let i = 0; i<1000; i++){
-        accountNumber = number+('00' + i).substr(-digits)
+    let tot = Math.pow(10, Math.min(10, digits))
+    for (let i = 0; i<tot; i++){
+        accountNumber = number+('0000000000' + i).substr(-digits)
         result = bankAccountValidation.validate({
             countryCode,
             accountNumber,
