@@ -1,0 +1,23 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const defaultsDeep = require("lodash.defaultsdeep");
+const defaultConfig_1 = require("../defaultConfig");
+const standarizeInput_1 = require("../util/standarizeInput");
+class SyntaxValidation {
+    constructor(config) {
+        this._config = defaultsDeep({}, config, defaultConfig_1.default);
+    }
+    canValidate() {
+        return true;
+    }
+    validate(input) {
+        input = standarizeInput_1.standarizeInput(input, 'none');
+        let isValid = input.type === 'none';
+        return {
+            valid: isValid,
+            reason: isValid ? null : `invalid syntax for type: '${input.type}'`
+        };
+    }
+}
+exports.SyntaxValidation = SyntaxValidation;
+//# sourceMappingURL=SyntaxValidation.js.map
