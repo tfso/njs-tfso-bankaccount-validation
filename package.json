@@ -1,12 +1,12 @@
 {
   "name": "njs-tfso-bankaccount-validation",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "Validation of IBAN and BBAN numbers and other country specific bank account formats. Extendable with custom validations",
   "main": "dist/src/index",
   "types": "dist/src/index",
   "scripts": {
     "build": "tsc",
-    "publish": "npm run build && publish-to-git --tag 1.7.0",
+    "publish": "npm run build && publish-to-git --tag 1.8.1",
     "test": "mocha --exit --recursive --timeout 10000 --require ts-node/register ./test/**/test*",
     "cover": "nyc npm run test"
   },
