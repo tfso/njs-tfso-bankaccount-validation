@@ -1,0 +1,67 @@
+{
+  "name": "njs-tfso-bankaccount-validation",
+  "version": "1.8.2",
+  "description": "Validation of IBAN and BBAN numbers and other country specific bank account formats. Extendable with custom validations",
+  "main": "dist/src/index",
+  "types": "dist/src/index",
+  "scripts": {
+    "build": "tsc",
+    "publish": "npm run build && publish-to-git --tag 1.8.2",
+    "test": "mocha --exit --recursive --timeout 10000 --require ts-node/register ./test/**/test*",
+    "cover": "nyc npm run test"
+  },
+  "dependencies": {
+    "lodash.defaultsdeep": "4.6.0"
+  },
+  "devDependencies": {
+    "@types/chai": "4.1.7",
+    "@types/lodash.defaultsdeep": "4.6.4",
+    "@types/mocha": "5.2.5",
+    "@types/sinon-chai": "3.2.2",
+    "chai": "4.2.0",
+    "ibantools": "2.0.0",
+    "mocha": "5.2.0",
+    "nyc": "14.1.1",
+    "publish-to-git": "github:tfso/publish-to-git",
+    "sinon-chai": "3.3.0",
+    "source-map-support": "0.5.9",
+    "ts-mocha": "2.0.0",
+    "ts-node": "7.0.1",
+    "typescript": "3.2.2"
+  },
+  "nyc": {
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "exclude": [
+      "**/*.d.ts"
+    ],
+    "reporter": [
+      "html",
+      "text"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tfso/njs-tfso-bankaccount-validation.git"
+  },
+  "keywords": [
+    "bankaccount",
+    "bank",
+    "account",
+    "validation",
+    "iban",
+    "bban"
+  ],
+  "author": "24SevenOffice",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tfso/njs-tfso-bankaccount-validation/issues"
+  },
+  "homepage": "https://github.com/tfso/njs-tfso-bankaccount-validation#readme",
+  "files": [
+    "dist",
+    "src"
+  ]
+}
