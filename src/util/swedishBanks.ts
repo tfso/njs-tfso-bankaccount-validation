@@ -194,6 +194,22 @@ export const swedishBanks: any[] = [
   {
     "bank": "Nordea (exkl. personkonton, cl 3300)",
     "clearingFrom": 3000,
+    "clearingTo": 3299,
+    "format": "00000xxxxxxC",
+    "type": 1,
+    "comment": 1
+  },
+  {
+    "bank": "Nordea - personkonto",
+    "clearingFrom": 3300,
+    "clearingTo": 3300,
+    "format": "00xxxxxxxxxC",
+    "type": 2,
+    "comment": 1
+  },
+  {
+    "bank": "Nordea (exkl. personkonton, cl 3300)",
+    "clearingFrom": 3301,
     "clearingTo": 3399,
     "format": "00000xxxxxxC",
     "type": 1,
@@ -202,6 +218,22 @@ export const swedishBanks: any[] = [
   {
     "bank": "Nordea (exkl. personkonton, cl 3782)",
     "clearingFrom": 3410,
+    "clearingTo": 3781,
+    "format": "00000xxxxxxC",
+    "type": 1,
+    "comment": 1
+  },
+  {
+    "bank": "Nordea - personkonto",
+    "clearingFrom": 3782,
+    "clearingTo": 3782,
+    "format": "00xxxxxxxxxC",
+    "type": 2,
+    "comment": 1
+  },
+  {
+    "bank": "Nordea (exkl. personkonton, cl 3782)",
+    "clearingFrom": 3783,
     "clearingTo": 3999,
     "format": "00000xxxxxxC",
     "type": 1,
@@ -342,14 +374,6 @@ export const swedishBanks: any[] = [
     "format": "00xxxxxxxxxC",
     "type": 2,
     "comment": 3
-  },
-  {
-    "bank": "Nordea - personkonto",
-    "clearingFrom": 3300,
-    "clearingTo": 3782,
-    "format": "00xxxxxxxxxC",
-    "type": 2,
-    "comment": 1
   },
   {
     "bank": "Riksg%uFFFDlden",
