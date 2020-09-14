@@ -11,7 +11,7 @@
     "cover": "nyc npm run test"
   },
   "dependencies": {
-    "lodash.defaultsdeep": "4.6.0"
+    "lodash.defaultsdeep": "4.6.1"
   },
   "devDependencies": {
     "@types/chai": "4.1.7",
