@@ -11,23 +11,23 @@
     "cover": "nyc npm run test"
   },
   "dependencies": {
-    "lodash.defaultsdeep": "4.6.0"
+    "lodash.defaultsdeep": "4.6.1"
   },
   "devDependencies": {
-    "@types/chai": "4.1.7",
-    "@types/lodash.defaultsdeep": "4.6.4",
-    "@types/mocha": "5.2.5",
-    "@types/sinon-chai": "3.2.2",
-    "chai": "4.2.0",
-    "ibantools": "2.0.0",
-    "mocha": "5.2.0",
-    "nyc": "14.1.1",
+    "@types/chai": "4.2.21",
+    "@types/lodash.defaultsdeep": "4.6.6",
+    "@types/mocha": "9.0.0",
+    "@types/sinon-chai": "3.2.5",
+    "chai": "4.3.4",
+    "ibantools": "3.3.1",
+    "mocha": "9.1.1",
+    "nyc": "15.1.0",
     "publish-to-git": "github:tfso/publish-to-git",
-    "sinon-chai": "3.3.0",
-    "source-map-support": "0.5.9",
-    "ts-mocha": "2.0.0",
-    "ts-node": "7.0.1",
-    "typescript": "3.2.2"
+    "sinon-chai": "3.7.0",
+    "source-map-support": "0.5.19",
+    "ts-mocha": "8.0.0",
+    "ts-node": "10.2.1",
+    "typescript": "4.4.2"
   },
   "nyc": {
     "extension": [
