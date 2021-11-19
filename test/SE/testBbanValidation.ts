@@ -7,7 +7,7 @@ describe('SwedishBbanValidation', ()=> {
         validation = new SwedishBbanValidation({})
     })
 
-    describe('when validating', ()=> {
+    describe('when validating including clearing number', ()=> {
         it('should validate a valid Swedish BBAN account as string input', ()=>{
             chai.expect(validation.validate({accountNumber: '54401122003'} /* prod */)).to.deep.equal({
                 'valid': true,
@@ -83,6 +83,82 @@ describe('SwedishBbanValidation', ()=> {
 
         it('should invalidate a Swedish BBAN account with invalid syntax', ()=>{
             chai.expect(validation.validate({accountNumber: '544088888888'})).to.deep.equal({
+                valid: false,
+                reason: 'Invalid swedish syntax. Number must be 11, 13 or 14 digits long'
+            })
+        })
+    })
+
+
+    describe('when validating with separate clearing number', ()=> {
+        it('should validate a valid Swedish BBAN account as object input', ()=>{
+            chai.expect(validation.validate({clearingNumber:'5440', accountNumber: '1122003'})).to.deep.equal({
+                'valid': true,
+                reason: null
+            })
+        })
+
+        it('should validate a valid type 1.1 Swedish BBAN account (SEB)', ()=>{
+            chai.expect(validation.validate({clearingNumber:'5440', accountNumber: '1122003'})).to.deep.equal({
+                'valid': true,
+                reason: null
+            })
+        })
+
+        it('should validate a valid type 1.1 Swedish BBAN account (danskebank)', ()=>{
+            chai.expect(validation.validate({clearingNumber:'1281', accountNumber: '1122001'})).to.deep.equal({
+                'valid': true,
+                reason: null
+            })
+        })
+        it('should validate a valid type 1.2 Swedish BBAN account (Dnb)', ()=>{
+            chai.expect(validation.validate({clearingNumber:'9195', accountNumber: '1122005'})).to.deep.equal({
+                'valid': true,
+                reason: null
+            })
+        })
+        it('should validate a valid type 1.2 Swedish BBAN account (Lansforsakringer WASA Bank)', ()=>{
+            chai.expect(validation.validate({clearingNumber:'9023', accountNumber: '1122006'})).to.deep.equal({
+                'valid': true,
+                reason: null
+            })
+        })
+        it('should validate a valid type 2.1 Swedish BBAN account (Sparebanken syd)', ()=>{
+            chai.expect(validation.validate({clearingNumber:'9570', accountNumber: '1122211004'})).to.deep.equal({
+                'valid': true,
+                reason: null
+            })
+        })
+        it('should validate a valid type 2.2 Swedish BBAN account (Handelsbanken)', ()=>{
+            chai.expect(validation.validate({clearingNumber:'6000', accountNumber: '112221009'})).to.deep.equal({
+                'valid': true,
+                reason: null
+            })
+        })
+        it('should validate a valid type 2.3 Swedish BBAN account (Swedbank)', ()=>{
+            chai.expect(validation.validate({clearingNumber:'8388', accountNumber: '1122211004'})).to.deep.equal({
+                'valid': true,
+                reason: null
+            })
+        })
+
+        it('should invalidate an invalid Swedish BBAN account', ()=>{
+            chai.expect(validation.validate({clearingNumber:'5440', accountNumber: '1122004'})).to.deep.equal({
+                'valid': false,
+                reason: "Invalid Swedish bban"
+            })
+        })
+
+
+        it('should invalidate an unknown clearing number in a Swedish BBAN account (type 0.0)', ()=>{
+            chai.expect(validation.validate({clearingNumber:'9030', accountNumber: '7777777'})).to.deep.equal({
+                valid: false,
+                reason: "Invalid Swedish bban"
+            })
+        })
+
+        it('should invalidate a Swedish BBAN account with invalid syntax', ()=>{
+            chai.expect(validation.validate({clearingNumber:'5440', accountNumber: '88888888'})).to.deep.equal({
                 valid: false,
                 reason: 'Invalid swedish syntax. Number must be 11, 13 or 14 digits long'
             })

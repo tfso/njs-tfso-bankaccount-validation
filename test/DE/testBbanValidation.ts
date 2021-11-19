@@ -1,4 +1,4 @@
-import * as chai from 'chai'
+import chai from 'chai'
 import {DE_BbanValidation} from "../../src/validators/DE_BbanValidation"
 
 describe('DE_BbanValidation', ()=> {

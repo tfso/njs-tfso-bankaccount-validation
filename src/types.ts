@@ -5,6 +5,7 @@ export interface BankAccountValidationConfig{
 export interface ValidationInput{
     accountNumber: string
     countryCode?: string
+    clearingNumber?: string | null
     type?: string
 }
 
