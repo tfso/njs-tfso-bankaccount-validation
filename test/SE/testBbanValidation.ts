@@ -124,7 +124,7 @@ describe('SwedishBbanValidation', ()=> {
             })
         })
         it('should validate a valid type 2.1 Swedish BBAN account (Sparebanken syd)', ()=>{
-            chai.expect(validation.validate({clearingNumber:'9570', accountNumber: '1122211004'})).to.deep.equal({
+            chai.expect(validation.validate({clearingNumber:'9570', accountNumber: '9122211007'})).to.deep.equal({
                 'valid': true,
                 reason: null
             })
@@ -148,7 +148,6 @@ describe('SwedishBbanValidation', ()=> {
                 reason: "Invalid Swedish bban"
             })
         })
-
 
         it('should invalidate an unknown clearing number in a Swedish BBAN account (type 0.0)', ()=>{
             chai.expect(validation.validate({clearingNumber:'9030', accountNumber: '7777777'})).to.deep.equal({
