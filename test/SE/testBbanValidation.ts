@@ -7,8 +7,8 @@ describe('SwedishBbanValidation', ()=> {
         validation = new SwedishBbanValidation({})
     })
 
-    describe('when validating including clearing number', ()=> {
-        it('should validate a valid Swedish BBAN account as string input', ()=>{
+    describe('when validating with clearing number specified in the account number', ()=> {
+        it('should validate a valid Swedish BBAN account', ()=>{
             chai.expect(validation.validate({accountNumber: '54401122003'} /* prod */)).to.deep.equal({
                 'valid': true,
                 reason: null
@@ -84,13 +84,13 @@ describe('SwedishBbanValidation', ()=> {
         it('should invalidate a Swedish BBAN account with invalid syntax', ()=>{
             chai.expect(validation.validate({accountNumber: '544088888888'})).to.deep.equal({
                 valid: false,
-                reason: 'Invalid swedish syntax. Number must be 11, 13 or 14 digits long'
+                reason: 'Invalid swedish syntax. Number must be 11, 13 or 14 digits long (incl clearing number)'
             })
         })
     })
 
 
-    describe('when validating with separate clearing number', ()=> {
+    describe('when validating with separate clearing number specified', ()=> {
         it('should validate a valid Swedish BBAN account as object input', ()=>{
             chai.expect(validation.validate({clearingNumber:'5440', accountNumber: '1122003'})).to.deep.equal({
                 'valid': true,
@@ -160,7 +160,7 @@ describe('SwedishBbanValidation', ()=> {
         it('should invalidate a Swedish BBAN account with invalid syntax', ()=>{
             chai.expect(validation.validate({clearingNumber:'5440', accountNumber: '88888888'})).to.deep.equal({
                 valid: false,
-                reason: 'Invalid swedish syntax. Number must be 11, 13 or 14 digits long'
+                reason: 'Invalid swedish syntax. Number must be 11, 13 or 14 digits long (incl clearing number)'
             })
         })
     })

@@ -20,8 +20,8 @@ export class SwedishBbanValidation implements IStrictValidation {
 
     constructor(config: Partial<types.BankAccountValidationConfig>) {
         this._config = defaultsDeep({}, config, defaultConfig)
-        /* syntax: clearing (4 digit) + account number (7, 9 or 10 digit) or account number only (7, 9 or 10 digit) */
-        this._syntaxTester = /^\d{4}(:?\d{7}|\d{9}|\d{10})|(:?\d{7}|\d{9}|\d{10})$/
+        /* syntax: optional clearing (4 digit) + account number (7, 9 or 10 digit)*/
+        this._syntaxTester = /^(\d{4}(:?\d{7}|\d{9}|\d{10})|(:?\d{7}|\d{9}|\d{10}))$/
     }
 
     canValidate(input: ValidationInput): Boolean {
@@ -33,17 +33,16 @@ export class SwedishBbanValidation implements IStrictValidation {
 
     validate(input: ValidationInput): ValidationResult {
         input = standarizeInput(input, 'none')
+        let account = this.parseClearingAndBban(input.clearingNumber || null, input.accountNumber)
 
-        let validSyntax = this._syntaxTester.test(input.clearingNumber || '' + input.accountNumber)
+        let validSyntax = this._syntaxTester.test(account.bban)
 
         if (!validSyntax){
             return {
                 valid: false,
-                reason: 'Invalid swedish syntax. Number must be 7, 9 10, 11, 13 or 14 digits long'
+                reason: 'Invalid swedish syntax. Number must be 11, 13 or 14 digits long (incl clearing number)'
             }
         }
-
-        let account = this.parseClearingAndBban(input.clearingNumber || null, input.accountNumber)
 
         if (
             account.type === '1.1' && account.length === 7  && sweMod11(account.bban.substr(1)) ||
@@ -66,14 +65,14 @@ export class SwedishBbanValidation implements IStrictValidation {
 
     private parseClearingAndBban(_clearing:string|null, bban:string):Account {
         // swedbank used 5 chars in clearing, remove the last one (always a 9-er!?)
-        let clearing = _clearing ? parseInt(_clearing.substr(4)) : parseInt(bban.substr(0,4))
+        let clearing = _clearing ? parseInt(_clearing) : parseInt(bban.substr(0,4))
         let accountNumber = _clearing ? bban :bban.substr(4)
         let type = this.getType(clearing)
 
         return {
             clearing,
             accountNumber,
-            bban,
+            bban:  [clearing, accountNumber].join(''),
             type,
             length: accountNumber.length
         }

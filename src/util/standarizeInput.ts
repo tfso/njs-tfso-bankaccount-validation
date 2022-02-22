@@ -21,5 +21,5 @@ export function standarizeInput(input: string | ValidationInput, type:string):Va
             type
         }
     }
-    return {...input, clearingNumber: null}
+    return {...input}
 }
