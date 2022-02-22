@@ -33,9 +33,9 @@ export class SwedishBbanValidation implements IStrictValidation {
 
     validate(input: ValidationInput): ValidationResult {
         input = standarizeInput(input, 'none')
-        let account = this.parseClearingAndAccountNumber(input.clearingNumber || null, input.accountNumber)
+        const account = this.parseClearingAndAccountNumber(input.clearingNumber || null, input.accountNumber)
 
-        let validSyntax = this._syntaxTester.test(account.bban)
+        const validSyntax = this._syntaxTester.test(account.bban)
 
         if (!validSyntax){
             return {
@@ -65,9 +65,9 @@ export class SwedishBbanValidation implements IStrictValidation {
 
     private parseClearingAndAccountNumber(_clearing:string|null, bban:string):Account {
         // swedbank used 5 chars in clearing, remove the last one (always a 9-er!?)
-        let clearing = _clearing ? parseInt(_clearing) : parseInt(bban.substr(0,4))
-        let accountNumber = _clearing ? bban :bban.substr(4)
-        let type = this.getType(clearing)
+        const clearing = _clearing ? parseInt(_clearing) : parseInt(bban.substr(0,4))
+        const accountNumber = _clearing ? bban :bban.substr(4)
+        const type = this.getType(clearing)
 
         return {
             clearing,
@@ -79,7 +79,7 @@ export class SwedishBbanValidation implements IStrictValidation {
     }
 
     private getType(clearingNumber:number):string {
-        let banks = swedishBanks.filter(bank => {
+        const banks = swedishBanks.filter(bank => {
             return bank.clearingFrom <= clearingNumber && clearingNumber <= bank.clearingTo
         })
 
@@ -87,7 +87,7 @@ export class SwedishBbanValidation implements IStrictValidation {
             return '0.0'
         }
 
-        let bank = banks[0]
+        const bank = banks[0]
 
         return bank.type + '.' + bank.comment
     }
@@ -95,11 +95,11 @@ export class SwedishBbanValidation implements IStrictValidation {
 
 
 function sweMod10(number:string){
-    let sum = calculate(number, [2,1], (n:any) => n>9 ? n-9:n)
+    const sum = calculate(number, [2,1], (n:any) => n>9 ? n-9:n)
     return modulusValidation(sum, 10)
 }
 
 function sweMod11(number:string){
-    let sum = calculate(number, [10,9,8,7,6,5,4,3,2,1])
+    const sum = calculate(number, [10,9,8,7,6,5,4,3,2,1])
     return modulusValidation(sum, 11)
 }

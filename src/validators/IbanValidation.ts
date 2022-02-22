@@ -28,7 +28,7 @@ export class IbanValidation implements IStrictValidation {
     validate(input: ValidationInput) : ValidationResult {
         input = standarizeInput(input, 'none')
 
-        let isValid = ibantools.isValidIBAN(input.accountNumber)
+        const isValid = ibantools.isValidIBAN(input.accountNumber)
         return {
             valid: isValid,
             reason: isValid ? null : 'Invalid iban'

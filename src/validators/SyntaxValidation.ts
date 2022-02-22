@@ -18,7 +18,7 @@ export class SyntaxValidation implements IStrictValidation {
     validate(input: ValidationInput): ValidationResult {
         input = standarizeInput(input, 'none')
 
-        let isValid = input.type === 'none'
+        const isValid = input.type === 'none'
 
         return {
             valid: isValid,

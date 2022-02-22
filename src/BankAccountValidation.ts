@@ -42,7 +42,7 @@ export class BankAccountValidation{
     }
 
     validate(input:string|ValidationInput): ValidationsResult{
-        let validationResults = this._validationRules
+        const validationResults = this._validationRules
             .filter(validationRule =>{
                 return validationRule.canValidate(input)
             })
@@ -57,11 +57,11 @@ export class BankAccountValidation{
             }
         }
 
-        let validResults = validationResults.filter(result => result.valid)
-        let invalidResults = validationResults.filter(result => !result.valid)
+        const validResults = validationResults.filter(result => result.valid)
+        const invalidResults = validationResults.filter(result => !result.valid)
 
         // @ts-ignore
-        let reasons : string[] = invalidResults
+        const reasons : string[] = invalidResults
             .map(result => result.reason)
 
         if (this._config.acceptanceType === AcceptanceType.some){

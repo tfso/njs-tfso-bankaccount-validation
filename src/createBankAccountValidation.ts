@@ -9,7 +9,7 @@ import {DanishBbanValidation} from "./validators/DanishBbanValidation"
 // import {SyntaxValidation} from "./validators/SyntaxValidation"
 
 export function createValidationWithAllAvailableValidators(config: Partial<types.BankAccountValidationConfig>){
-    let bankAccountValidation = new BankAccountValidation(config)
+    const bankAccountValidation = new BankAccountValidation(config)
     // bankAccountValidation.add(new SyntaxValidation(config))
     bankAccountValidation.addStrict(new IbanValidation(config))
     bankAccountValidation.addStrict(new SwedishBankgiroValidation(config))
