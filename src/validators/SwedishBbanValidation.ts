@@ -33,7 +33,7 @@ export class SwedishBbanValidation implements IStrictValidation {
 
     validate(input: ValidationInput): ValidationResult {
         input = standarizeInput(input, 'none')
-        let account = this.parseClearingAndBban(input.clearingNumber || null, input.accountNumber)
+        let account = this.parseClearingAndAccountNumber(input.clearingNumber || null, input.accountNumber)
 
         let validSyntax = this._syntaxTester.test(account.bban)
 
@@ -63,7 +63,7 @@ export class SwedishBbanValidation implements IStrictValidation {
         }
     }
 
-    private parseClearingAndBban(_clearing:string|null, bban:string):Account {
+    private parseClearingAndAccountNumber(_clearing:string|null, bban:string):Account {
         // swedbank used 5 chars in clearing, remove the last one (always a 9-er!?)
         let clearing = _clearing ? parseInt(_clearing) : parseInt(bban.substr(0,4))
         let accountNumber = _clearing ? bban :bban.substr(4)
