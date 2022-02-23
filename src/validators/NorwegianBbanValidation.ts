@@ -25,8 +25,8 @@ export class NorwegianBbanValidation implements IStrictValidation {
     validate(input: ValidationInput) {
         input = standarizeInput(input, 'none')
 
-        let validSyntax = this._syntaxTester.test(input.accountNumber)
-        let validModCheck = norMod11(input.accountNumber)
+        const validSyntax = this._syntaxTester.test(input.accountNumber)
+        const validModCheck = norMod11(input.accountNumber)
         return {
             valid: validSyntax &&
                 validModCheck,
@@ -36,6 +36,6 @@ export class NorwegianBbanValidation implements IStrictValidation {
     }
 }
 function norMod11(number:string){
-    let sum = calculate(number, [5, 4, 3, 2, 7, 6, 5, 4, 3, 2, 1])
+    const sum = calculate(number, [5, 4, 3, 2, 7, 6, 5, 4, 3, 2, 1])
     return modulusValidation(sum, 11)
 }

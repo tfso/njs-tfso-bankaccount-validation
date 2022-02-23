@@ -23,6 +23,6 @@ export function calculate(number: string, weights: number[], postProcess:any = (
 
 
 export function modulusValidation(sum:number, modulus: number) {
-    let modValue = sum / modulus
+    const modValue = sum / modulus
     return (modValue - Math.floor(modValue)) === 0
 }

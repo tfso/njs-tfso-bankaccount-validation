@@ -28,8 +28,8 @@ export class SwedishBankgiroValidation implements IStrictValidation {
             }
         }
 
-        let validSyntax = this._syntaxTester.test(input.accountNumber)
-        let validModCheck = sweMod10(input.accountNumber.replace('-', ''))
+        const validSyntax = this._syntaxTester.test(input.accountNumber)
+        const validModCheck = sweMod10(input.accountNumber.replace('-', ''))
         return {
             valid: validSyntax &&
                 validModCheck,
@@ -40,6 +40,6 @@ export class SwedishBankgiroValidation implements IStrictValidation {
 }
 
 function sweMod10(number:string){
-    let sum = calculate(number, [2,1], (n:any) => n>9 ? n-9:n)
+    const sum = calculate(number, [2,1], (n:any) => n>9 ? n-9:n)
     return modulusValidation(sum, 10)
 }

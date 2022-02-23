@@ -23,7 +23,7 @@ export class PL_BbanValidation implements IStrictValidation {
     validate(input: ValidationInput) {
         input = standarizeInput(input, 'none')
 
-        let validSyntax = this._syntaxTester.test(input.accountNumber)
+        const validSyntax = this._syntaxTester.test(input.accountNumber)
         return {
             valid: validSyntax,
             reason: !validSyntax ? 'Number does not contain 24 digits' : null

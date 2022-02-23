@@ -1,7 +1,7 @@
 import {ValidationInput} from "../types"
 
 // export function standarizeInput(input: string | ValidationInput):ValidationInput {
-//     let result:ValidationInput
+//     const result:ValidationInput
 //     if (typeof input === "string") {
 //         result = {
 //             accountNumber: input
@@ -16,8 +16,9 @@ export function standarizeInput(input: string | ValidationInput, type:string):Va
     if (typeof input === "string") {
         input = {
             accountNumber: input,
+            clearingNumber: null,
             type
         }
     }
-    return input
+    return {clearingNumber: null, ...input}
 }
