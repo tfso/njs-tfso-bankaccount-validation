@@ -14,6 +14,53 @@ interface Account{
     length: number
 }
 
+function extractClearingNumber(_clearing: string | null, bban: string) {
+    return _clearing ? parseInt(_clearing) : parseInt(bban.substr(0, 4))
+}
+
+function extractAccountNumberOnly(_clearing: string | null, bban: string) {
+    return _clearing ? bban : bban.substr(4)
+}
+
+function getType(clearingNumber:number):string {
+    const banks = swedishBanks.filter(bank => {
+        return bank.clearingFrom <= clearingNumber && clearingNumber <= bank.clearingTo
+    })
+
+    if (banks.length !== 1 ) {
+        return '0.0'
+    }
+
+    const bank = banks[0]
+
+    return bank.type + '.' + bank.comment
+}
+
+function createBbanInclClearingNumber(clearing: number, accountNumber: string) {
+    return [clearing, accountNumber].join('')
+}
+
+/**
+ * clearing number might be set separate or included in the bban as the 4 first digits.
+ * This function extract these values in two separate fields in addition to a joint field
+ * called accountNumber with both fields.
+ * @param _clearing
+ * @param bban
+ */
+function parseClearingAndAccountNumber(_clearing:string|null, bban:string):Account {
+    // swedbank used 5 chars in clearing, remove the last one (always a 9-er!?)
+    const clearing = extractClearingNumber(_clearing, bban)
+    const accountNumber = extractAccountNumberOnly(_clearing, bban)
+
+    return {
+        clearing,
+        accountNumber,
+        bban:  createBbanInclClearingNumber(clearing, accountNumber),
+        type: getType(clearing),
+        length: accountNumber.length
+    }
+}
+
 export class SwedishBbanValidation implements IStrictValidation {
     _config: types.BankAccountValidationConfig
     private _syntaxTester: RegExp
@@ -33,7 +80,7 @@ export class SwedishBbanValidation implements IStrictValidation {
 
     validate(input: ValidationInput): ValidationResult {
         input = standarizeInput(input, 'none')
-        const account = this.parseClearingAndAccountNumber(input.clearingNumber || null, input.accountNumber)
+        const account = parseClearingAndAccountNumber(input.clearingNumber || null, input.accountNumber)
 
         const validSyntax = this._syntaxTester.test(account.bban)
 
@@ -61,35 +108,6 @@ export class SwedishBbanValidation implements IStrictValidation {
             valid: false,
             reason: 'Invalid Swedish bban'
         }
-    }
-
-    private parseClearingAndAccountNumber(_clearing:string|null, bban:string):Account {
-        // swedbank used 5 chars in clearing, remove the last one (always a 9-er!?)
-        const clearing = _clearing ? parseInt(_clearing) : parseInt(bban.substr(0,4))
-        const accountNumber = _clearing ? bban :bban.substr(4)
-        const type = this.getType(clearing)
-
-        return {
-            clearing,
-            accountNumber,
-            bban:  [clearing, accountNumber].join(''),
-            type,
-            length: accountNumber.length
-        }
-    }
-
-    private getType(clearingNumber:number):string {
-        const banks = swedishBanks.filter(bank => {
-            return bank.clearingFrom <= clearingNumber && clearingNumber <= bank.clearingTo
-        })
-
-        if (banks.length !== 1 ) {
-            return '0.0'
-        }
-
-        const bank = banks[0]
-
-        return bank.type + '.' + bank.comment
     }
 }
 
