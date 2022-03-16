@@ -80,6 +80,18 @@ export class SwedishBbanValidation implements IStrictValidation {
 
     validate(input: ValidationInput): ValidationResult {
         input = standarizeInput(input, 'none')
+
+        // Bypass validation if clearing number is specified. This is because the rules
+        // with all its edge cases was hard to implement. This exception should be reviewed
+        // and removed at a later stage when we get control of all the edge cases.
+        // Currently 5 digit clearing numbers is not supported
+        if (input.clearingNumber){
+            return {
+                valid: true,
+                reason: null
+            }
+        }
+
         const account = parseClearingAndAccountNumber(input.clearingNumber || null, input.accountNumber)
 
         const validSyntax = this._syntaxTester.test(account.bban)
