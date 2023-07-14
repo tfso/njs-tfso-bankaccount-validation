@@ -1,0 +1,71 @@
+name: Release Package
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: create release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: npm access token
+        run: |
+          npm config set @tfso:registry=https://npm.pkg.github.com --userconfig .npmrc
+          npm config set //npm.pkg.github.com/:_authToken=${NPM_TOKEN} --userconfig .npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TFSO_TOKEN }}
+
+      - name: Update package.json
+        run: |
+          git config --global user.name '${{github.actor}}'
+          git config --global user.email '${{github.actor}}@users.noreply.github.com'
+          npm version ${{github.event.release.tag_name}} --no-git-tag-version
+          git add package.json
+          git commit -m "Update package.json version to $version"
+          git push origin HEAD:master
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: build project
+        run: |
+          npm install
+          npm run build
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v2.3.1
+        with:
+          name: artifact
+          path: |
+            dist/
+            package.json
+            README.md
+
+  publish-gpr:
+    name: publish to github
+    if: github.event.release.draft == false && github.event.release.prerelease == false
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: download artifact
+        uses: actions/download-artifact@v2.1.0
+        with:
+          name: artifact
+
+      - name: setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: https://npm.pkg.github.com/
+          scope: "@tfso"
+
+      - name: publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
