@@ -1,3 +1,18 @@
+## The workflow will:
+##  - create a new version, build the package and run tests
+##  - publish a release to npm when you create a new GitHub release.
+##  - publish a prerelease to npm from:
+##     - main branch
+##     - all branches with #deploy_branch in the commit message.
+##
+## The workflow assumes the following:
+##  - package.json has a "version" property
+##  - package.json has a "name" with the format "@tfso/<my-package>"
+##  - package.json has the following scripts
+##    - "build" - build the package into the ./dist folder
+##    - "test"
+##  - the project is installable with "npm ci"
+
 name: Release Package
 
 on:
@@ -6,10 +21,11 @@ on:
 
 jobs:
   build:
-    name: create release
+    name: build release
     runs-on: ubuntu-latest
+    if: github.event.release.draft == false && github.event.release.prerelease == false
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: npm access token
         run: |
@@ -24,48 +40,47 @@ jobs:
           git config --global user.email '${{github.actor}}@users.noreply.github.com'
           npm version ${{github.event.release.tag_name}} --no-git-tag-version
           git add package.json
-          git commit -m "Update package.json version to $version"
-          git push origin HEAD:master
+          git commit -m "Update package.json version to ${{github.event.release.tag_name}} "
+          git push origin HEAD:main
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
-      - name: build project
-        run: |
-          npm install
-          npm run build
 
-      - name: upload artifact
-        uses: actions/upload-artifact@v2.3.1
+      - name: install project
+        run: npm ci
+
+      - name: build project
+        run: npm run build
+
+      - name: upload artifact (from content in ./dist folder)
+        uses: actions/upload-artifact@v3
         with:
           name: artifact
-          path: |
-            dist/
-            package.json
-            README.md
+          path: ./dist
 
-  publish-gpr:
-    name: publish to github
-    if: github.event.release.draft == false && github.event.release.prerelease == false
+  publish:
+    name: publish release
     needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+
     steps:
       - name: download artifact
-        uses: actions/download-artifact@v2.1.0
+        uses: actions/download-artifact@v3
         with:
           name: artifact
 
       - name: setup
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           registry-url: https://npm.pkg.github.com/
           scope: "@tfso"
 
-      - name: publish
+      - name: Publish release to Npm
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
