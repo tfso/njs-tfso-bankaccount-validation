@@ -1,0 +1,12 @@
+{
+    "extends": ["tfso/javascript", "prettier"],
+    "env": {
+        "mocha": true
+    },
+    "rules": {
+        "no-unused-vars": [
+            "warn",
+            { "vars": "all", "args": "none", "ignoreRestSiblings": true }
+        ]
+    }
+}

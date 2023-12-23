@@ -8,6 +8,11 @@
     "clean": "rm -rf package-lock.json node_modules",
     "build": "bash ./build.sh",
     "mocha": "mocha --exit --recursive --timeout 10000 --require ts-node/register ./test/**/test*",
+    "lint": "npx eslint src test",
+    "lint:fix": "npm run lint -- --fix",
+    "prettier": "npx prettier . --check",
+    "prettier:fix": "npm run prettier -- --write",
+    "format": "npm run prettier:fix && npm run lint:fix",
     "test": "npm run mocha",
     "cover": "nyc --reporter=html --reporter=text npm run mocha"
 
