@@ -15,7 +15,6 @@
     "format": "npm run prettier:fix && npm run lint:fix",
     "test": "npm run mocha",
     "cover": "nyc --reporter=html --reporter=text npm run mocha"
-
   },
   "dependencies": {
     "ibantools": "4.1.4",
@@ -27,8 +26,11 @@
     "@types/mocha": "10.0.0",
     "@types/sinon-chai": "3.2.5",
     "chai": "4.3.4",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
     "mocha": "10.2.0",
     "nyc": "^15.1.0",
+    "prettier": "^3.1.1",
     "sinon-chai": "3.7.0",
     "source-map-support": "0.5.19",
     "ts-mocha": "10.0.0",
