@@ -7,7 +7,7 @@
   "scripts": {
     "clean": "rm -rf package-lock.json node_modules",
     "build": "bash ./build.sh",
-    "mocha": "mocha --exit --recursive --timeout 10000 --require ts-node/register ./test/**/test*",
+    "mocha": "mocha --exit --recursive --timeout 10000 --require ts-node/register ./src/**/test*",
     "lint": "npx eslint src test tool",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "npx prettier . --check",

@@ -1,5 +1,5 @@
 import * as chai from 'chai'
-import {SwedishBankgiroValidation} from '../../src/validators/SwedishBankgiroValidation'
+import {SwedishBankgiroValidation} from '../../validators/SwedishBankgiroValidation'
 
 describe('SwedishBankgiroValidation', ()=> {
     let validation:SwedishBankgiroValidation

@@ -1,9 +1,9 @@
 import * as chai from 'chai'
-import {BankAccountValidation} from '../src'
-import {IbanValidation} from '../src/validators/IbanValidation'
-import {AcceptValidation} from '../src/validators/AcceptValidation'
-import {RejectValidation} from '../src/validators/RejectValidation'
-import {AcceptanceType} from "../src/types"
+import {BankAccountValidation} from '../'
+import {IbanValidation} from '../validators/IbanValidation'
+import {AcceptValidation} from '../validators/AcceptValidation'
+import {RejectValidation} from '../validators/RejectValidation'
+import {AcceptanceType} from "../types"
 
 describe('BankAccountValidation', ()=> {
     describe('when adding validators', ()=> {

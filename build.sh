@@ -15,4 +15,3 @@ tsc
 #cp -r ./src ./dist/src/
 cp README.md ./dist/
 cp package.json ./dist/
-cp index.js ./dist/
