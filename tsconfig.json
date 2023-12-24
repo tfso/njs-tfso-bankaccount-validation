@@ -23,8 +23,8 @@
     ],
     "rootDir": "./src",
     "sourceRoot": "./src",
-    "outDir": "./dist"
+    "outDir": "./build"
   },
-  "include": ["src", "test", "typings"],
+  "include": ["src", "typings"],
   "exclude": ["node_modules", "build", "dist"]
 }
