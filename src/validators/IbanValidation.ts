@@ -1,10 +1,9 @@
 import defaultsDeep = require('lodash.defaultsdeep')
 import * as types from "../types"
-import {IStrictValidation, ValidationInput} from "../types"
+import {IStrictValidation, ValidationInput, ValidationResult} from "../types"
 import defaultConfig from "../defaultConfig"
 import {standarizeInput} from "../util/standarizeInput"
 import * as ibantools from "ibantools"
-import {ValidationResult} from "../types"
 
 export class IbanValidation implements IStrictValidation {
     _config: types.BankAccountValidationConfig

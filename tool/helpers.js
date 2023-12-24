@@ -1,3 +1,4 @@
+/* eslint-disable */
 const {createValidationWithAllAvailableValidators} = require('../dist/src/index')
 let bankAccountValidation  = createValidationWithAllAvailableValidators({})
 
