@@ -16,73 +16,73 @@
 name: Release Package
 
 on:
-  release:
-    types: [published]
+    release:
+        types: [published]
 
 jobs:
-  build:
-    name: build release
-    runs-on: ubuntu-latest
-    if: github.event.release.draft == false && github.event.release.prerelease == false
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+    build:
+        name: build release
+        runs-on: ubuntu-latest
+        if: github.event.release.draft == false && github.event.release.prerelease == false
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
 
-      - name: npm access token
-        run: |
-          npm config set @tfso:registry=https://npm.pkg.github.com --userconfig .npmrc
-          npm config set //npm.pkg.github.com/:_authToken=${NPM_TOKEN} --userconfig .npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TFSO_TOKEN }}
+            - name: npm access token
+              run: |
+                  npm config set @tfso:registry=https://npm.pkg.github.com --userconfig .npmrc
+                  npm config set //npm.pkg.github.com/:_authToken=${NPM_TOKEN} --userconfig .npmrc
+              env:
+                  NPM_TOKEN: ${{ secrets.NPM_TFSO_TOKEN }}
 
-      - name: Update package.json and CHANGELOG.md
-        run: |
-          git config --global user.name '${{github.actor}}'
-          git config --global user.email '${{github.actor}}@users.noreply.github.com'
-          npm version ${{github.event.release.tag_name}} --no-git-tag-version
-          npx auto-changelog -p && git add CHANGELOG.md
-          git add package.json
-          git commit -m "Update package.json version to ${{github.event.release.tag_name}} "
-          git push origin HEAD:${{github.event.release.target_commitish}}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
+            - name: Update package.json and CHANGELOG.md
+              run: |
+                  git config --global user.name '${{github.actor}}'
+                  git config --global user.email '${{github.actor}}@users.noreply.github.com'
+                  npm version ${{github.event.release.tag_name}} --no-git-tag-version
+                  npx auto-changelog -p && git add CHANGELOG.md
+                  git add package.json
+                  git commit -m "Update package.json version to ${{github.event.release.tag_name}} "
+                  git push origin HEAD:${{github.event.release.target_commitish}}
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 18
 
-      - name: install project
-        run: npm ci
+            - name: install project
+              run: npm ci
 
-      - name: build project
-        run: npm run build
+            - name: build project
+              run: npm run build
 
-      - name: upload artifact (from content in ./dist folder)
-        uses: actions/upload-artifact@v3
-        with:
-          name: artifact
-          path: ./dist
+            - name: upload artifact (from content in ./dist folder)
+              uses: actions/upload-artifact@v3
+              with:
+                  name: artifact
+                  path: ./dist
 
-  publish:
-    name: publish release
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
+    publish:
+        name: publish release
+        needs: build
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            packages: write
 
-    steps:
-      - name: download artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: artifact
+        steps:
+            - name: download artifact
+              uses: actions/download-artifact@v3
+              with:
+                  name: artifact
 
-      - name: setup
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          registry-url: https://npm.pkg.github.com/
-          scope: "@tfso"
+            - name: setup
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 18
+                  registry-url: https://npm.pkg.github.com/
+                  scope: '@tfso'
 
-      - name: Publish release to Npm
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+            - name: Publish release to Npm
+              run: npm publish
+              env:
+                  NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}

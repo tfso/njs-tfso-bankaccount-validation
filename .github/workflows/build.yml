@@ -16,65 +16,64 @@
 name: Build Package
 
 on:
-  push:
-    branches:
-      - "**"
-    tags-ignore:
-      - "*.*"
+    push:
+        branches:
+            - '**'
+        tags-ignore:
+            - '*.*'
 
 jobs:
-  build:
-    name: Build and test
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.npm.outputs.version }}
-      prerelease: ${{ steps.npm.outputs.prerelease }}
-      is_prerelease: ${{ steps.npm.outputs.is_prerelease }}
-      deploy: ${{ steps.npm.outputs.deploy }}
+    build:
+        name: Build and test
+        runs-on: ubuntu-latest
+        outputs:
+            version: ${{ steps.npm.outputs.version }}
+            prerelease: ${{ steps.npm.outputs.prerelease }}
+            is_prerelease: ${{ steps.npm.outputs.is_prerelease }}
+            deploy: ${{ steps.npm.outputs.deploy }}
 
-    steps:
-      - name: Install, build and test
-        uses: tfso/action-helpers/npm-build@v1
-        id: npm
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_GLOBAL_TOKEN: ${{ secrets.TFSO_REPO_READ }}
-          NPM_TOKEN: ${{ secrets.NPM_TFSO_TOKEN }}
-          TRUNCATE_PRERELEASE: true
-          NODE_VERSION: 18
+        steps:
+            - name: Install, build and test
+              uses: tfso/action-helpers/npm-build@v1
+              id: npm
+              with:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GITHUB_GLOBAL_TOKEN: ${{ secrets.TFSO_REPO_READ }}
+                  NPM_TOKEN: ${{ secrets.NPM_TFSO_TOKEN }}
+                  TRUNCATE_PRERELEASE: true
+                  NODE_VERSION: 18
 
-      - name: upload artifact (from content in ./dist folder)
-        uses: actions/upload-artifact@v3
-        with:
-          name: artifact
-          path: ./dist
+            - name: upload artifact (from content in ./dist folder)
+              uses: actions/upload-artifact@v3
+              with:
+                  name: artifact
+                  path: ./dist
 
-  publish:
-    name: publish prerelease
-    if: ${{ needs.build.outputs.deploy == 'true' }}
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
+    publish:
+        name: publish prerelease
+        if: ${{ needs.build.outputs.deploy == 'true' }}
+        needs: build
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            packages: write
 
-    steps:
-      - name: download artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: artifact
+        steps:
+            - name: download artifact
+              uses: actions/download-artifact@v3
+              with:
+                  name: artifact
 
-      - name: setup
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          registry-url: https://npm.pkg.github.com/
-          scope: "@tfso"
+            - name: setup
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 18
+                  registry-url: https://npm.pkg.github.com/
+                  scope: '@tfso'
 
-      - name: Publish prerelease to Npm
-        run: |
-          npm version prerelease --preid=${{github.ref_name}}-${{github.run_number}} --no-git-tag-version
-          npm publish --verbose --tag dev
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+            - name: Publish prerelease to Npm
+              run: |
+                  npm version prerelease --preid=${{github.ref_name}}-${{github.run_number}} --no-git-tag-version
+                  npm publish --verbose --tag dev --no-tag
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
