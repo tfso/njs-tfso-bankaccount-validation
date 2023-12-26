@@ -36,6 +36,9 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TFSO_TOKEN }}
 
+      - name: Dump context
+        uses: crazy-max/ghaction-dump-context@v1
+
       - name: Update package.json and CHANGELOG.md
         run: |
           git config --global user.name '${{github.actor}}'
@@ -44,8 +47,7 @@ jobs:
           npx auto-changelog -p && git add CHANGELOG.md
           git add package.json
           git commit -m "Update package.json version to ${{github.event.release.tag_name}} "
-          git push origin HEAD:main
-
+          git push origin HEAD:${{github.event.release.target_commitish}}
       - uses: actions/setup-node@v4
         with:
           node-version: 18
