@@ -1,5 +1,5 @@
 {
-    "extends": ["tfso/typescript", "prettier"],
+    "extends": ["@tfso/eslint-config/typescript", "prettier"],
     "env": {
         "mocha": true
     },
