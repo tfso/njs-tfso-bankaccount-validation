@@ -36,9 +36,6 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TFSO_TOKEN }}
 
-      - name: Dump context
-        uses: crazy-max/ghaction-dump-context@v1
-
       - name: Update package.json and CHANGELOG.md
         run: |
           git config --global user.name '${{github.actor}}'
