@@ -1,6 +1,6 @@
 {
   "name": "@tfso/njs-bankaccount-validation",
-  "version": "1.13.1",
+  "version": "1.14.0",
   "description": "Validation of IBAN and BBAN numbers and other country specific bank account formats. Extendable with custom validations",
   "main": "dist/src/index",
   "types": "dist/src/index",
