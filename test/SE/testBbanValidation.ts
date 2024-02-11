@@ -59,12 +59,6 @@ describe('SwedishBbanValidation', ()=> {
                 reason: null
             })
         })
-        it('should validate a valid type 2.3 Swedish BBAN account (Swedbank)', ()=>{
-            chai.expect(validation.validate({accountNumber: '83881122211004'})).to.deep.equal({
-                'valid': true,
-                reason: null
-            })
-        })
 
         it('should invalidate an invalid Swedish BBAN account', ()=>{
             chai.expect(validation.validate({accountNumber: '54401122004'})).to.deep.equal({
@@ -135,12 +129,6 @@ describe('SwedishBbanValidation', ()=> {
                 reason: null
             })
         })
-        it('should validate a valid type 2.3 Swedish BBAN account (Swedbank)', ()=>{
-            chai.expect(validation.validate({clearingNumber:'8388', accountNumber: '1122211004'})).to.deep.equal({
-                'valid': true,
-                reason: null
-            })
-        })
 
         xit('should invalidate an invalid Swedish BBAN account', ()=>{
             chai.expect(validation.validate({clearingNumber:'5440', accountNumber: '1122004'})).to.deep.equal({
@@ -166,6 +154,54 @@ describe('SwedishBbanValidation', ()=> {
         it('should not validate a Swedish BBAN account if clearing number is specified', ()=>{
             chai.expect(validation.validate({clearingNumber:'yoMan', accountNumber: '88888888'})).to.deep.equal({
                 valid: true,
+                reason: null
+            })
+        })
+    })
+
+    describe('4 char clearing number type 2.3 (that starts with 8) Swedish Swedbank BBAN account ', ()=> {
+        // CCCC0KKKKKKKKK
+        // (4 siffror i clearingnumret, en extra nolla, 9 siffror i kontonumret - totalt 14 siffror).
+        it('should validate a valid type 2.3 Swedish BBAN account (Swedbank)', ()=>{ // TODO: here
+            chai.expect(validation.validate({accountNumber: '83880122211006'})).to.deep.equal({
+                'valid': true,
+                reason: null
+            })
+        })
+        it('should validate account number with starting 0', ()=>{
+            chai.expect(validation.validate({clearingNumber:'8388', accountNumber: '0122211006'})).to.deep.equal({
+                'valid': true,
+                reason: null
+            })
+        })
+
+        it('should validate account number without starting 0', ()=>{
+            chai.expect(validation.validate({clearingNumber:'8388', accountNumber: '122211006'})).to.deep.equal({
+                'valid': true,
+                reason: null
+            })
+        })
+    })
+
+    describe('5 char clearing number type 2.3 (that starts with 8) Swedish Swedbank BBAN account ', ()=> {
+        // CCCCC0KKKKKKKKK
+        // (5 siffror i clearingnumret, en extra nolla, 9 siffror i kontonumret - totalt 15 siffror).
+        it('should validate a valid type 2.3 Swedish BBAN account (Swedbank)', ()=>{
+            chai.expect(validation.validate({accountNumber: '838890122211006'})).to.deep.equal({
+                'valid': true,
+                reason: null
+            })
+        })
+        it('should validate account number with starting 0', ()=>{
+            chai.expect(validation.validate({clearingNumber:'83889', accountNumber: '0122211006'})).to.deep.equal({
+                'valid': true,
+                reason: null
+            })
+        })
+
+        it('should validate account number without starting 0', ()=>{
+            chai.expect(validation.validate({clearingNumber:'83889', accountNumber: '122211006'})).to.deep.equal({
+                'valid': true,
                 reason: null
             })
         })
