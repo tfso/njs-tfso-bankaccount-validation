@@ -15,11 +15,11 @@ interface Account{
 }
 
 function extractClearingNumber(_clearing: string | null, bban: string) {
-    return _clearing ? parseInt(_clearing) : parseInt(bban.substr(0, 4))
+    return _clearing ? parseInt(_clearing) : parseInt(bban.slice(0, 4))
 }
 
 function extractAccountNumberOnly(_clearing: string | null, bban: string) {
-    return _clearing ? bban : bban.substr(4)
+    return _clearing ? bban : bban.slice(4)
 }
 
 function getType(clearingNumber:number):string {
@@ -64,11 +64,14 @@ function parseClearingAndAccountNumber(_clearing:string|null, bban:string):Accou
 export class SwedishBbanValidation implements IStrictValidation {
     _config: types.BankAccountValidationConfig
     private _syntaxTester: RegExp
+    private _syntaxTesterSwedbank: RegExp
 
     constructor(config: Partial<types.BankAccountValidationConfig>) {
         this._config = defaultsDeep({}, config, defaultConfig)
         /* syntax: optional clearing (4 digit) + account number (7, 9 or 10 digit)*/
         this._syntaxTester = /^(\d{4}(:?\d{7}|\d{9}|\d{10})|(:?\d{7}|\d{9}|\d{10}))$/
+        /* syntax: 5 digit clearing starting with 8 + nolla + account number 9 digit */
+        this._syntaxTesterSwedbank = /^8\d{4}0\d{9}$/
     }
 
     canValidate(input: ValidationInput): Boolean {
@@ -94,7 +97,7 @@ export class SwedishBbanValidation implements IStrictValidation {
 
         const account = parseClearingAndAccountNumber(input.clearingNumber || null, input.accountNumber)
 
-        const validSyntax = this._syntaxTester.test(account.bban)
+        const validSyntax = this._syntaxTester.test(account.bban) || this._syntaxTesterSwedbank.test(account.bban)
 
         if (!validSyntax){
             return {
@@ -104,11 +107,13 @@ export class SwedishBbanValidation implements IStrictValidation {
         }
 
         if (
-            account.type === '1.1' && account.length === 7  && sweMod11(account.bban.substr(1)) ||
+            account.type === '1.1' && account.length === 7  && sweMod11(account.bban.slice(1)) ||
             account.type === '1.2' && account.length === 7  && sweMod11(account.bban) ||
             account.type === '2.1' && account.length === 10 && sweMod10(account.accountNumber) ||
             account.type === '2.2' && account.length === 9  && sweMod11(account.accountNumber) ||
-            account.type === '2.3' && account.length === 10 && sweMod10(account.accountNumber)
+            account.type === '2.3' && account.length === 10 && sweMod10(account.accountNumber) ||
+            // supporting 5 digit clearing number - Swedbank
+            account.type === '2.3' && account.length === 11 && sweMod10(account.accountNumber.slice(-10))
         ){
             return {
                 valid: true,
