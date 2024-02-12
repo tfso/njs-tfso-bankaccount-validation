@@ -1,33 +1,79 @@
+## The workflow will:
+##  - create a new version, build the package and run tests
+##  - publish a release to npm when you create a new GitHub release.
+##  - publish a prerelease to npm from:
+##     - main branch
+##     - all branches with #deploy_branch in the commit message.
+##
+## The workflow assumes the following:
+##  - package.json has a "version" property
+##  - package.json has a "name" with the format "@tfso/<my-package>"
+##  - package.json has the following scripts
+##    - "build" - build the package into the ./dist folder
+##    - "test"
+##  - the project is installable with "npm ci"
+
 name: Build Package
 
 on:
-  push:
-    branches:
-      - "**"
-    tags-ignore:
-      - "*.*"
+    push:
+        branches:
+            - '**'
+        tags-ignore:
+            - '*.*'
 
 jobs:
-  Publish:
-    name: Build Release
-    runs-on: ubuntu-latest
-    steps:
-      - name: build code
-        uses: actions/checkout@v3
+    build:
+        name: Build and test
+        runs-on: ubuntu-latest
+        outputs:
+            version: ${{ steps.npm.outputs.version }}
+            prerelease: ${{ steps.npm.outputs.prerelease }}
+            is_prerelease: ${{ steps.npm.outputs.is_prerelease }}
+            deploy: ${{ steps.npm.outputs.deploy }}
 
-      - name: setup
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18.x"
+        steps:
+            - name: Install, build and test
+              uses: tfso/action-helpers/npm-build@v1
+              id: npm
+              with:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GITHUB_GLOBAL_TOKEN: ${{ secrets.TFSO_REPO_READ }}
+                  NPM_TOKEN: ${{ secrets.NPM_TFSO_TOKEN }}
+                  TRUNCATE_PRERELEASE: true
+                  NODE_VERSION: 18
 
-      - name: npm access token
-        run: |
-          npm config set @tfso:registry=https://npm.pkg.github.com --userconfig .npmrc
-          npm config set //npm.pkg.github.com/:_authToken=${NPM_TOKEN} --userconfig .npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TFSO_TOKEN }}
+            - name: upload artifact (from content in ./dist folder)
+              uses: actions/upload-artifact@v3
+              with:
+                  name: artifact
+                  path: ./dist
 
-      - name: build project
-        run: |
-          npm install
-          npm run build
+    publish:
+        name: publish prerelease
+        if: ${{ needs.build.outputs.deploy == 'true' }}
+        needs: build
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            packages: write
+
+        steps:
+            - name: download artifact
+              uses: actions/download-artifact@v3
+              with:
+                  name: artifact
+
+            - name: setup
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 18
+                  registry-url: https://npm.pkg.github.com/
+                  scope: '@tfso'
+
+            - name: Publish prerelease to Npm
+              run: |
+                  npm version prerelease --preid=${{github.ref_name}}-${{github.run_number}} --no-git-tag-version
+                  npm publish --verbose --tag dev --no-tag
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

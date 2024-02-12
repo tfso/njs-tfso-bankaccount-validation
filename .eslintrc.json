@@ -1,0 +1,12 @@
+{
+    "extends": ["@tfso/eslint-config/typescript", "prettier"],
+    "env": {
+        "mocha": true
+    },
+    "rules": {
+        "@typescript-eslint/no-unused-vars": [
+            "warn",
+            { "vars": "all", "args": "none", "ignoreRestSiblings": true }
+        ]
+    }
+}

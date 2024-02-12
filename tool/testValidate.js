@@ -1,3 +1,4 @@
+/* eslint-disable */
 const {calculate, calculateNext} = require('./helpers')
 
 calculate('EG', 'EG250010005400000100026173878', 'iban')

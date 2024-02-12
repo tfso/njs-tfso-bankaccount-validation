@@ -1,4 +1,5 @@
-const {calculate, calculateNext} = require('./helpers')
+/* eslint-disable */
+const {calculateNext} = require('./helpers')
 
 for (let i=0; i<100; i++){
     calculateNext('NO', '999999'+('0000' + i).substr(-2)+'000', 'bban',2)

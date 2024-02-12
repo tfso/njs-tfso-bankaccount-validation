@@ -1,31 +1,31 @@
 import * as chai from 'chai'
-import {DanishBbanValidation} from "../../src/validators/DanishBbanValidation"
+import {DE_BbanValidation} from "../../validators/DE_BbanValidation"
 
-describe('DanishBbanValidation', ()=> {
-    let validation:DanishBbanValidation
+describe('DE_BbanValidation', ()=> {
+    let validation:DE_BbanValidation
     beforeEach(()=> {
-        validation = new DanishBbanValidation({})
+        validation = new DE_BbanValidation({})
     })
 
     describe('when validating', ()=> {
-        it('should validate a valid Danish BBAN account as object input', ()=>{
-            chai.expect(validation.validate({accountNumber: '00400440116243'})).to.deep.equal({
+        it('should validate a valid German BBAN account as object input', ()=>{
+            chai.expect(validation.validate({accountNumber: '370400440532013000'})).to.deep.equal({
                 valid: true,
                 reason: null
             })
         })
 
         it('should invalidate an invalid Danish BBAN account', ()=>{
-            chai.expect(validation.validate({accountNumber: '004004401169243'})).to.deep.equal({
+            chai.expect(validation.validate({accountNumber: '37040044053201300'})).to.deep.equal({
                 valid: false,
-                reason: 'Number does not contain 14 digits'
+                reason: 'Number does not contain 18 digits'
             })
         })
     })
 
     describe('when determining suitability', ()=> {
-        it('should accept a danish country', ()=>{
-            chai.expect(validation.canValidate({accountNumber: 'invalid', countryCode: 'DK', type: 'bban'})).to.equal(true)
+        it('should accept a german country', ()=>{
+            chai.expect(validation.canValidate({accountNumber: 'invalid', countryCode: 'DE', type: 'bban'})).to.equal(true)
         })
         it('should not accept a swedish country', ()=>{
             chai.expect(validation.canValidate({accountNumber: 'invalid', countryCode: 'SE', type: 'bban'})).to.equal(false)

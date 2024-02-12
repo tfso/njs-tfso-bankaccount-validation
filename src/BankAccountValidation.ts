@@ -1,10 +1,8 @@
 import * as types from './types'
 import defaultsDeep = require('lodash.defaultsdeep')
 import defaultConfig from './defaultConfig'
-import {AcceptanceType, IValidation, ValidationInput, ValidationsResult} from "./types"
+import {AcceptanceType, IValidation, ValidationInput, ValidationsResult, IStrictValidation, ValidationResult} from "./types"
 import {standarizeInput} from "./util/standarizeInput"
-import {ValidationResult} from "./types"
-import {IStrictValidation} from "./types"
 
 class StrictValidationWrapper implements IValidation{
     _strictValidation: types.IStrictValidation

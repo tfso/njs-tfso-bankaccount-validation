@@ -1,5 +1,5 @@
 import * as chai from 'chai'
-import {NorwegianBbanValidation} from '../../src/validators/NorwegianBbanValidation'
+import {NorwegianBbanValidation} from '../../validators/NorwegianBbanValidation'
 
 // 11110077949
 // 22220012607
