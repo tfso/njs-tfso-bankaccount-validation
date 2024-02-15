@@ -1,8 +1,8 @@
 import defaultsDeep = require('lodash.defaultsdeep')
-import * as types from "../types"
-import {IStrictValidation, ValidationInput} from "../types"
-import defaultConfig from "../defaultConfig"
-import {standarizeInput} from "../util/standarizeInput"
+import * as types from '../types'
+import { IStrictValidation, ValidationInput } from '../types'
+import defaultConfig from '../defaultConfig'
+import { standarizeInput } from '../util/standarizeInput'
 
 export class DanishBbanValidation implements IStrictValidation {
     _config: types.BankAccountValidationConfig
@@ -13,11 +13,10 @@ export class DanishBbanValidation implements IStrictValidation {
         this._syntaxTester = /^\d{14}$/
     }
 
-    canValidate(input: ValidationInput): Boolean {
+    canValidate(input: ValidationInput): boolean {
         input = standarizeInput(input, 'none')
 
-        return (input.type === 'bban')
-            && input.countryCode === 'DK'
+        return input.type === 'bban' && input.countryCode === 'DK'
     }
 
     validate(input: ValidationInput) {
@@ -26,7 +25,7 @@ export class DanishBbanValidation implements IStrictValidation {
         const validSyntax = this._syntaxTester.test(input.accountNumber)
         return {
             valid: validSyntax,
-            reason: !validSyntax ? 'Number does not contain 14 digits' : null
+            reason: !validSyntax ? 'Number does not contain 14 digits' : null,
         }
     }
 }

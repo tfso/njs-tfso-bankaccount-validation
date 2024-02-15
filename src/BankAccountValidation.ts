@@ -1,18 +1,27 @@
 import * as types from './types'
 import defaultsDeep = require('lodash.defaultsdeep')
 import defaultConfig from './defaultConfig'
-import {AcceptanceType, IValidation, ValidationInput, ValidationsResult, IStrictValidation, ValidationResult} from "./types"
-import {standarizeInput} from "./util/standarizeInput"
+import {
+    AcceptanceType,
+    IValidation,
+    ValidationInput,
+    ValidationsResult,
+    IStrictValidation,
+    ValidationResult,
+} from './types'
+import { standarizeInput } from './util/standarizeInput'
 
-class StrictValidationWrapper implements IValidation{
+class StrictValidationWrapper implements IValidation {
     _strictValidation: types.IStrictValidation
 
-    constructor(strictValidation:IStrictValidation) {
+    constructor(strictValidation: IStrictValidation) {
         this._strictValidation = strictValidation
     }
 
-    canValidate(input: any): Boolean {
-        return this._strictValidation.canValidate(standarizeInput(input, 'none'))
+    canValidate(input: any): boolean {
+        return this._strictValidation.canValidate(
+            standarizeInput(input, 'none')
+        )
     }
 
     validate(input: any): ValidationResult {
@@ -20,63 +29,63 @@ class StrictValidationWrapper implements IValidation{
     }
 }
 
-export class BankAccountValidation{
+export class BankAccountValidation {
     _config: types.BankAccountValidationConfig
-    _validationRules: (types.IValidation)[]
+    _validationRules: types.IValidation[]
 
-    constructor(config: Partial<types.BankAccountValidationConfig>){
+    constructor(config: Partial<types.BankAccountValidationConfig>) {
         this._config = defaultsDeep({}, config, defaultConfig)
         this._validationRules = []
     }
 
-    addStrict(validationRule: types.IStrictValidation){
-        this._validationRules.push(
-            new StrictValidationWrapper(validationRule)
-        )
+    addStrict(validationRule: types.IStrictValidation) {
+        this._validationRules.push(new StrictValidationWrapper(validationRule))
     }
 
-    add(validationRule: types.IValidation){
+    add(validationRule: types.IValidation) {
         this._validationRules.push(validationRule)
     }
 
-    validate(input:string|ValidationInput): ValidationsResult{
+    validate(input: string | ValidationInput): ValidationsResult {
         const validationResults = this._validationRules
-            .filter(validationRule =>{
+            .filter((validationRule) => {
                 return validationRule.canValidate(input)
             })
-            .map(validationRule =>{
+            .map((validationRule) => {
                 return validationRule.validate(input)
             })
 
-        if (validationResults.length === 0){
+        if (validationResults.length === 0) {
             return {
                 valid: undefined,
-                reasons:[]
+                reasons: [],
             }
         }
 
-        const validResults = validationResults.filter(result => result.valid)
-        const invalidResults = validationResults.filter(result => !result.valid)
+        const validResults = validationResults.filter((result) => result.valid)
+        const invalidResults = validationResults.filter(
+            (result) => !result.valid
+        )
 
-        // @ts-ignore
-        const reasons : string[] = invalidResults
-            .map(result => result.reason)
+        const reasons: string[] = invalidResults.map(
+            (result) => result.reason || ''
+        )
 
-        if (this._config.acceptanceType === AcceptanceType.some){
+        if (this._config.acceptanceType === AcceptanceType.some) {
             return {
                 valid: validResults.length > 0,
-                reasons
+                reasons,
             }
         }
-        if (this._config.acceptanceType === AcceptanceType.all){
+        if (this._config.acceptanceType === AcceptanceType.all) {
             return {
                 valid: validResults.length === validationResults.length,
-                reasons
+                reasons,
             }
         }
         return {
             valid: undefined,
-            reasons:[]
+            reasons: [],
         }
     }
 }

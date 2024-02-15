@@ -1,8 +1,8 @@
 import defaultsDeep = require('lodash.defaultsdeep')
-import * as types from "../types"
-import {IStrictValidation, ValidationInput, ValidationResult} from "../types"
-import defaultConfig from "../defaultConfig"
-import {standarizeInput} from "../util/standarizeInput"
+import * as types from '../types'
+import { IStrictValidation, ValidationInput, ValidationResult } from '../types'
+import defaultConfig from '../defaultConfig'
+import { standarizeInput } from '../util/standarizeInput'
 
 export class SyntaxValidation implements IStrictValidation {
     _config: types.BankAccountValidationConfig
@@ -11,7 +11,7 @@ export class SyntaxValidation implements IStrictValidation {
         this._config = defaultsDeep({}, config, defaultConfig)
     }
 
-    canValidate(): Boolean {
+    canValidate(): boolean {
         return true
     }
 
@@ -22,8 +22,7 @@ export class SyntaxValidation implements IStrictValidation {
 
         return {
             valid: isValid,
-            reason: isValid ? null : `invalid syntax for type: '${input.type}'`
-
+            reason: isValid ? null : `invalid syntax for type: '${input.type}'`,
         }
     }
 }

@@ -1,4 +1,4 @@
-import {ValidationInput} from "../types"
+import { ValidationInput } from '../types'
 
 // export function standarizeInput(input: string | ValidationInput):ValidationInput {
 //     const result:ValidationInput
@@ -12,13 +12,16 @@ import {ValidationInput} from "../types"
 //     return result
 // }
 
-export function standarizeInput(input: string | ValidationInput, type:string):ValidationInput {
-    if (typeof input === "string") {
+export function standarizeInput(
+    input: string | ValidationInput,
+    type: string
+): ValidationInput {
+    if (typeof input === 'string') {
         input = {
             accountNumber: input,
             clearingNumber: null,
-            type
+            type,
         }
     }
-    return {clearingNumber: null, ...input}
+    return { clearingNumber: null, ...input }
 }

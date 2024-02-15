@@ -1,15 +1,14 @@
-import {IValidation, ValidationResult} from "../types"
+import { IValidation, ValidationResult } from '../types'
 
 export class AcceptValidation implements IValidation {
-
-    canValidate(): Boolean {
+    canValidate(): boolean {
         return true
     }
 
     validate(): ValidationResult {
         return {
             valid: true,
-            reason: null
+            reason: null,
         }
     }
 }

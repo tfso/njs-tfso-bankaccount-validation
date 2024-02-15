@@ -1,5 +1,5 @@
-import {AcceptanceType} from "./types"
+import { AcceptanceType } from './types'
 
 export default {
-    acceptanceType: AcceptanceType.all
+    acceptanceType: AcceptanceType.all,
 }

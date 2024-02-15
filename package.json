@@ -2,13 +2,12 @@
   "name": "@tfso/njs-bankaccount-validation",
   "version": "1.14.1",
   "description": "Validation of IBAN and BBAN numbers and other country specific bank account formats. Extendable with custom validations",
-  "main": "dist/src/index",
-  "types": "dist/src/index",
+  "main": "index",
   "scripts": {
     "clean": "rm -rf package-lock.json node_modules",
     "build": "bash ./build.sh",
     "mocha": "mocha --exit --recursive --timeout 10000 --require ts-node/register ./src/**/test*",
-    "lint": "npx eslint src test tool",
+    "lint": "npx eslint src tool",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "npx prettier . --check",
     "prettier:fix": "npm run prettier -- --write",
@@ -70,10 +69,6 @@
     "url": "https://github.com/tfso/njs-tfso-bankaccount-validation/issues"
   },
   "homepage": "https://github.com/tfso/njs-tfso-bankaccount-validation#readme",
-  "files": [
-    "dist",
-    "src"
-  ],
   "auto-changelog": {
     "issueUrl": "https://24so.atlassian.net/browse/{id}",
     "issuePattern": "[A-Z]+-\\d+",
