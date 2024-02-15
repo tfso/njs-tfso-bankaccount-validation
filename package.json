@@ -3,6 +3,7 @@
   "version": "1.14.1",
   "description": "Validation of IBAN and BBAN numbers and other country specific bank account formats. Extendable with custom validations",
   "main": "index",
+  "typings": "index",
   "scripts": {
     "clean": "rm -rf package-lock.json node_modules",
     "build": "bash ./build.sh",
