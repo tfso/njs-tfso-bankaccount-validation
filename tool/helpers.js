@@ -1,7 +1,5 @@
 /* eslint-disable */
-const {
-    createValidationWithAllAvailableValidators,
-} = require('../dist/src/index')
+const { createValidationWithAllAvailableValidators } = require('../dist/index')
 let bankAccountValidation = createValidationWithAllAvailableValidators({})
 
 function calculate(countryCode, accountNumber, type, resultFunc = console.log) {

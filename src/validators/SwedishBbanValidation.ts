@@ -78,7 +78,7 @@ export class SwedishBbanValidation implements IStrictValidation {
         this._syntaxTester =
             /^(\d{4}(:?\d{7}|\d{9}|\d{10})|(:?\d{7}|\d{9}|\d{10}))$/
         /* syntax: 5 digit clearing starting with 8 + nolla + account number 9 digit */
-        this._syntaxTesterSwedbank = /^8\d{4}0\d{9}$/
+        this._syntaxTesterSwedbank = /^8\d{4}\d{10}$/
     }
 
     canValidate(input: ValidationInput): boolean {
@@ -117,26 +117,15 @@ export class SwedishBbanValidation implements IStrictValidation {
             }
         }
 
+        // prettier-ignore
         if (
-            (account.type === '1.1' &&
-                account.length === 7 &&
-                sweMod11(account.bban.slice(1))) ||
-            (account.type === '1.2' &&
-                account.length === 7 &&
-                sweMod11(account.bban)) ||
-            (account.type === '2.1' &&
-                account.length === 10 &&
-                sweMod10(account.accountNumber)) ||
-            (account.type === '2.2' &&
-                account.length === 9 &&
-                sweMod11(account.accountNumber)) ||
-            (account.type === '2.3' &&
-                account.length === 10 &&
-                sweMod10(account.accountNumber)) ||
+            (account.type === '1.1' && account.length === 7  && sweMod11(account.bban.slice(1))) ||
+            (account.type === '1.2' && account.length === 7  && sweMod11(account.bban)) ||
+            (account.type === '2.1' && account.length === 10 && sweMod10(account.accountNumber)) ||
+            (account.type === '2.2' && account.length === 9  && sweMod11(account.accountNumber)) ||
+            (account.type === '2.3' && account.length === 10 && sweMod10(account.accountNumber)) ||
             // supporting 5 digit clearing number - Swedbank
-            (account.type === '2.3' &&
-                account.length === 11 &&
-                sweMod10(account.accountNumber.slice(-10)))
+            (account.type === '2.3' && account.length === 11 && sweMod10(account.accountNumber.slice(-10)))
         ) {
             return {
                 valid: true,
